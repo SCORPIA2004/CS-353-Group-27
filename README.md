@@ -7,11 +7,9 @@
 ## Deliverables:
 
 <table align="center">
-    <th>#</th>
     <th>Description</th>
     <th>Link</th>
   <tr>
-    <td>D1</td>
     <td>Project Proposal</td>
     <td><a href="https://docs.google.com/document/d/1a1FE01Tn5zaQ6PLF_T1COM1uKE3bagN9YvpgDM7MZZ4/edit?usp=sharing">Link</a></td>
   </tr>
