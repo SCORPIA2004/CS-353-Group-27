@@ -102,8 +102,8 @@ the platform and bolstering moderation and safety on the Bilkent platform.
       <td align="center" valign="top" width="20%"><a href="https://github.com/Agast0"><img src="https://avatars.githubusercontent.com/u/19611332?v=4" width="100px;" alt="Zahaab Khawaja"/><br /><b>Zahaab Khawaja</b></a><br/>22101038</td>
       <td align="center" valign="top" width="20%"><a href="https://github.com/Yassin-Younis"><img src="https://avatars.githubusercontent.com/u/91337404?v=4" width="100px;" alt="Yassin Younis"/><br /><b>Yassin Younis</b></a><br/>22101310</td>
       <td align="center" valign="top" width="20%"><a href="https://github.com/SCORPIA2004"><img src="https://avatars.githubusercontent.com/u/62741526?v=4" width="100px;" alt="Muhammad Shayan Usman"/><br/><b>Muhammad Shayan Usman</b></a><br/>22101343</td>
-      <td align="center" valign="top" width="20%"><a href="https://github.com/SCORPIA2004"><img src="https://avatars.githubusercontent.com/u/62741526?v=4" width="100px;" alt="Muhammad Shayan Usman"/><br/><b>Ege Mehmet Kayaselçuk</b></a><br/>2</td>
-      <td align="center" valign="top" width="20%"><a href="https://github.com/SCORPIA2004"><img src="https://avatars.githubusercontent.com/u/62741526?v=4" width="100px;" alt="Muhammad Shayan Usman"/><br/><b>Murat Ertan</b></a><br/>2</td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/SCORPIA2004"><img src="https://avatars.githubusercontent.com/u/114066225?v=4" width="100px;" alt="Ege Mehmet Kayaselçuk"/><br/><b>Ege Mehmet Kayaselçuk</b></a><br/>2</td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/SCORPIA2004"><img src="https://avatars.githubusercontent.com/u/96013287?v=4" width="100px;" alt="Murat Ertan"/><br/><b>Murat Ertan</b></a><br/>2</td>
     </tr>
   </tbody>
 </table>
