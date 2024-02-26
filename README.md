@@ -11,7 +11,7 @@
     <th>Link</th>
   <tr>
     <td>Project Proposal</td>
-    <td><a href="https://docs.google.com/document/d/1a1FE01Tn5zaQ6PLF_T1COM1uKE3bagN9YvpgDM7MZZ4/edit?usp=sharing">Link</a></td>
+    <td><a href="/Proposal/Group 27 Project Proposal.pdf">Link</a></td>
   </tr>
 <!--   <tr>
     <td>D2</td>
