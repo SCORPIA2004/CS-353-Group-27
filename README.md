@@ -13,6 +13,10 @@
     <td>Project Proposal</td>
     <td><a href="/Proposal/Group 27 Project Proposal.pdf">Link</a></td>
   </tr>
+  <tr>
+    <td>Design Report</td>
+    <td><a href="/Design Report/Group 27 Design Report.pdf">Link</a></td>
+  </tr>
 <!--   <tr>
     <td>D2</td>
     <td>Sequence/Activity/Class/Sequence Diagrams/Mockups</td>
