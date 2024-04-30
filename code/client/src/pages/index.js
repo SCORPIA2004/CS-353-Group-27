@@ -3,6 +3,7 @@ import { Box, Button, Card, Container, Flex, Heading, Text } from "@radix-ui/rea
 import { useNavigate } from "react-router-dom";
 import useCheckAuthenticated from "../utils/useCheckAuthenticated"; 
 
+//For trainee
 const HomePage = () => {
   const navigate = useNavigate();
   const [isAuthenticated, isLoading] = useCheckAuthenticated(); 
@@ -57,7 +58,6 @@ const HomePage = () => {
           <Button onClick={() => navigate('/workout-selection')}>Start Workout</Button>
           <Button onClick={() => navigate('/nutrition-plan')}>Nutrition Plans</Button>
           <Button onClick={() => navigate('/leaderboard')}>Leaderboard</Button>
-          <Button onClick={() => navigate('/create-workout')}>Create Workout</Button>
         </Flex>
         
         <Card>
