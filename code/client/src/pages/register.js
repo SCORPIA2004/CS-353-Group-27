@@ -1,32 +1,93 @@
-import {Button, Card, Flex, Heading, Text, TextField} from "@radix-ui/themes";
-import {useNavigate} from "react-router-dom";
+import React, { useState } from 'react';
+import { Button, Card, Flex, Heading, Text, TextField } from "@radix-ui/react-components";
+import { useNavigate } from "react-router-dom";
 
 const RegisterPage = () => {
-    const navigate = useNavigate()
-    return (
-        <div>
-            <Flex justify='center' p='5'>
-                <Card>
-                    <Flex direction={'column'} p={'3'} justify={'center'}>
-                        <Heading m='1' align={'center'}>Register</Heading>
-                        <Text as="div" color="gray" size="2">
-                            Please provide your details to create an account.
-                        </Text>
-                        <Flex justify='center' direction='column' gap='1' mt='3'>
-                            <TextField.Root size="1" placeholder="Email"/>
-                            <TextField.Root size="1" placeholder="Password" required/>
-                            <TextField.Root size="1" placeholder="Password"/>
-                        </Flex>
-                        <Button my='2'>Register</Button>
-                        <Flex justify={'center'} align={'center'}>
-                            <Text size={'2'}>Already have an account?</Text>
-                            <Button variant={'ghost'} ml='5' onClick={() => navigate('/login')}>Login</Button>
-                        </Flex>
-                    </Flex>
-                </Card>
+  const navigate = useNavigate();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [message, setMessage] = useState('');
+
+  const handleRegistration = async (event) => {
+    event.preventDefault();
+    if (password !== confirmPassword) {
+      setMessage('Passwords do not match.');
+      return;
+    }
+
+    //Should change this api call with right one
+    try {
+      const response = await fetch('http://yourapi.com/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password })
+      });
+
+      if (response.ok) {
+        setMessage('Registration successful!');
+        setTimeout(() => navigate('/login'), 2000);
+      } else {
+        throw new Error('Failed to register');
+      }
+    } catch (error) {
+      setMessage('Registration failed. Please try again.');
+    }
+  };
+
+  return (
+    <div>
+      <Flex justify='center' p='5'>
+        <Card>
+          <form onSubmit={handleRegistration}>
+            <Flex direction={'column'} p={'3'} justify={'center'}>
+              <Heading m='1' align={'center'}>Register</Heading>
+              <Text as="div" color="gray" size="2">
+                Please provide your details to create an account.
+              </Text>
+              {message && (
+                <Text as="div" color="red" size="2" style={{ textAlign: 'center' }}>
+                  {message}
+                </Text>
+              )}
+              <Flex justify='center' direction='column' gap='1' mt='3'>
+                <TextField.Root 
+                  size="1" 
+                  placeholder="Email" 
+                  value={email}
+                  onValueChange={setEmail} 
+                  required
+                />
+                <TextField.Root 
+                  size="1" 
+                  placeholder="Password" 
+                  type="password"
+                  value={password}
+                  onValueChange={setPassword} 
+                  required
+                />
+                <TextField.Root 
+                  size="1" 
+                  placeholder="Confirm Password" 
+                  type="password"
+                  value={confirmPassword}
+                  onValueChange={setConfirmPassword} 
+                  required
+                />
+              </Flex>
+              <Button my='2' type="submit">Register</Button>
+              <Flex justify={'center'} align={'center'}>
+                <Text size={'2'}>Already have an account?</Text>
+                <Button variant={'ghost'} ml='5' onClick={() => navigate('/login')}>Login</Button>
+              </Flex>
             </Flex>
-        </div>
-    );
+          </form>
+        </Card>
+      </Flex>
+    </div>
+  );
 }
 
 export default RegisterPage;
