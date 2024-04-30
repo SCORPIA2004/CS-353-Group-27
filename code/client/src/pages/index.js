@@ -10,7 +10,6 @@ const HomePage = () => {
   const [nutritionPlans, setNutritionPlans] = useState([]);
 
   useEffect(() => {
-   
     if (!isLoading && !isAuthenticated) {
       navigate('/login');
     }
@@ -41,8 +40,16 @@ const HomePage = () => {
     }
   }, [navigate, isLoading, isAuthenticated]);
 
+  const style = {
+    backgroundImage: `url('bg.jpg')`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    width: '100vw',
+    height: '100vh'
+  };
+
   return (
-    <Container>
+    <Container style={style}>
       <Flex justify="center" direction="column" css={{ gap: '$4', padding: '$6' }}>
         <Heading css={{ textAlign: 'center' }}>Homepage</Heading>
         
