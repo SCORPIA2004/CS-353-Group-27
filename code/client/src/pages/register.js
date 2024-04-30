@@ -27,7 +27,7 @@ const RegisterPage = () => {
 
       if (response.ok) {
         setMessage('Registration successful!');
-        setTimeout(() => navigate('/login'), 2000); // navigate to login after 2 seconds
+        setTimeout(() => navigate('/login'), 2000); 
       } else {
         throw new Error('Failed to register');
       }
