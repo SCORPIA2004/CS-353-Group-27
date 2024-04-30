@@ -22,7 +22,15 @@ const LoginPage = () => {
       if (response.ok) {
         const data = await response.json();
         localStorage.setItem('token', data.token); 
-        navigate('/homepage'); 
+
+        //We should have role kind of thing here
+        const role = data.role;
+        
+        if (role === 'trainee') {
+          navigate('/homepage');
+        } else if (role === 'trainer') {
+          navigate('/TrainerHomepage');
+        }
       } else {
         setError('Invalid credentials. Please try again.'); 
       }
