@@ -11,7 +11,6 @@ const LoginPage = () => {
   const handleLogin = async (event) => {
     event.preventDefault();
     try {
-      //Should change this with actual api
       const response = await fetch('http://yourapi.com/login', {
         method: 'POST',
         headers: {
@@ -22,46 +21,53 @@ const LoginPage = () => {
 
       if (response.ok) {
         const data = await response.json();
-      
-        localStorage.setItem('token', data.token); // Token is returned right?
+        localStorage.setItem('token', data.token); 
         navigate('/homepage'); 
       } else {
-        setError('Invalid credentials. Please try again.');
+        setError('Invalid credentials. Please try again.'); 
       }
     } catch (err) {
-      setError('Failed to connect to the service. Please try again later.');
+      setError('Failed to connect to the service. Please try again later.'); 
     }
   };
 
   return (
-    <Container>
-      <Flex justify='center' css={{ padding: '$5' }}>
-        <Card>
-          <form onSubmit={handleLogin}>
-            <Flex direction='column' css={{ padding: '$3' }} justify='center'>
-              <Heading css={{ margin: '$1', textAlign: 'center' }}>Login</Heading>
-              <Text as="div" css={{ color: '$gray11', fontSize: '$3' }}>
-                Please enter your email and password.
-              </Text>
-              {error && (
-                <Text as="div" css={{ color: '$red11', fontSize: '$3', textAlign: 'center' }}>
-                  {error}
+    <div style={{
+      backgroundImage: "url('bg.jpg')", 
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      height: '100vh',  
+      width: '100vw'   
+    }}>
+      <Container>
+        <Flex justify='center' css={{ padding: '$5' }}>
+          <Card>
+            <form onSubmit={handleLogin}>
+              <Flex direction='column' css={{ padding: '$3' }} justify='center'>
+                <Heading css={{ margin: '$1', textAlign: 'center' }}>Login</Heading>
+                <Text as="div" css={{ color: '$gray11', fontSize: '$3' }}>
+                  Please enter your email and password.
                 </Text>
-              )}
-              <Flex justify='center' direction='column' css={{ gap: '$3', marginTop: '$5' }}>
-                <TextField.Root size="1" placeholder="Email" value={email} onValueChange={setEmail} />
-                <TextField.Root size="1" placeholder="Password" type="password" value={password} onValueChange={setPassword} />
+                {error && (
+                  <Text as="div" css={{ color: '$red11', fontSize: '$3', textAlign: 'center' }}>
+                    {error}
+                  </Text>
+                )}
+                <Flex justify='center' direction='column' css={{ gap: '$3', marginTop: '$5' }}>
+                  <TextField.Root size="1" placeholder="Email" value={email} onValueChange={setEmail} />
+                  <TextField.Root size="1" placeholder="Password" type="password" value={password} onValueChange={setPassword} />
+                </Flex>
+                <Button css={{ marginTop: '$4' }} type="submit">Login</Button>
+                <Flex justify='center' align='center' css={{ marginTop: '$3' }}>
+                  <Text css={{ fontSize: '$2' }}>New Here?</Text>
+                  <Button variant='ghost' css={{ marginLeft: '$5' }} onClick={() => navigate("/register")}>Create an account</Button>
+                </Flex>
               </Flex>
-              <Button css={{ marginTop: '$4' }} type="submit">Login</Button>
-              <Flex justify='center' align='center' css={{ marginTop: '$3' }}>
-                <Text css={{ fontSize: '$2' }}>New Here?</Text>
-                <Button variant='ghost' css={{ marginLeft: '$5' }} onClick={() => navigate("/register")}>Create an account</Button>
-              </Flex>
-            </Flex>
-          </form>
-        </Card>
-      </Flex>
-    </Container>
+            </form>
+          </Card>
+        </Flex>
+      </Container>
+    </div>
   );
 }
 
