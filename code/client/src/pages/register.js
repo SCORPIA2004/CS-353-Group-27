@@ -37,7 +37,13 @@ const RegisterPage = () => {
   };
 
   return (
-    <div>
+    <div style={{ 
+      backgroundImage: "url('bg.jpg')",
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      height: '100vh', 
+      width: '100vw' 
+    }}>
       <Flex justify='center' p='5'>
         <Card>
           <form onSubmit={handleRegistration}>
