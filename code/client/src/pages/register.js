@@ -16,7 +16,6 @@ const RegisterPage = () => {
       return;
     }
 
-    //Should change this api call with right one
     try {
       const response = await fetch('http://yourapi.com/register', {
         method: 'POST',
@@ -28,7 +27,7 @@ const RegisterPage = () => {
 
       if (response.ok) {
         setMessage('Registration successful!');
-        setTimeout(() => navigate('/login'), 2000);
+        setTimeout(() => navigate('/login'), 2000); // navigate to login after 2 seconds
       } else {
         throw new Error('Failed to register');
       }
@@ -57,7 +56,7 @@ const RegisterPage = () => {
                   size="1" 
                   placeholder="Email" 
                   value={email}
-                  onValueChange={setEmail} 
+                  onValueChange={(value) => setEmail(value)} 
                   required
                 />
                 <TextField.Root 
@@ -65,7 +64,7 @@ const RegisterPage = () => {
                   placeholder="Password" 
                   type="password"
                   value={password}
-                  onValueChange={setPassword} 
+                  onValueChange={(value) => setPassword(value)} 
                   required
                 />
                 <TextField.Root 
@@ -73,7 +72,7 @@ const RegisterPage = () => {
                   placeholder="Confirm Password" 
                   type="password"
                   value={confirmPassword}
-                  onValueChange={setConfirmPassword} 
+                  onValueChange={(value) => setConfirmPassword(value)} 
                   required
                 />
               </Flex>
