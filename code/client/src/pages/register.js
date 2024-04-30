@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Card, Flex, Heading, Text, TextField } from "@radix-ui/react-components";
+import { Button, Card, Flex, Heading, Text, TextField, Select } from "@radix-ui/react-components";
 import { useNavigate } from "react-router-dom";
 
 const RegisterPage = () => {
@@ -7,6 +7,7 @@ const RegisterPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [role, setRole] = useState('trainee'); 
   const [message, setMessage] = useState('');
 
   const handleRegistration = async (event) => {
@@ -22,12 +23,12 @@ const RegisterPage = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email, password })
+        body: JSON.stringify({ email, password, role }) 
       });
 
       if (response.ok) {
         setMessage('Registration successful!');
-        setTimeout(() => navigate('/login'), 2000); 
+        setTimeout(() => navigate('/login'), 2000);
       } else {
         throw new Error('Failed to register');
       }
@@ -41,8 +42,8 @@ const RegisterPage = () => {
       backgroundImage: "url('bg.jpg')",
       backgroundSize: 'cover',
       backgroundPosition: 'center',
-      height: '100vh', 
-      width: '100vw' 
+      height: '100vh',
+      width: '100vw'
     }}>
       <Flex justify='center' p='5'>
         <Card>
@@ -81,6 +82,15 @@ const RegisterPage = () => {
                   onValueChange={(value) => setConfirmPassword(value)} 
                   required
                 />
+                <Select 
+                  size="1"
+                  value={role}
+                  onValueChange={setRole}
+                  required
+                >
+                  <option value="trainee">Trainee</option>
+                  <option value="trainer">Trainer</option>
+                </Select>
               </Flex>
               <Button my='2' type="submit">Register</Button>
               <Flex justify={'center'} align={'center'}>
