@@ -17,6 +17,10 @@
     <td>Design Report</td>
     <td><a href="/Design Report/Group 27 Design Report.pdf">Link</a></td>
   </tr>
+  <tr>
+    <td>Final Report</td>
+    <td><a href="[/Design Report/Group 27 Design Report.pdf](https://docs.google.com/document/d/1pz9uKa2pDM3LUxlal_3NgOXn4DgWTCrePJvrTx2Uat8/edit?usp=sharing)">Link</a></td>
+  </tr>
 <!--   <tr>
     <td>D2</td>
     <td>Sequence/Activity/Class/Sequence Diagrams/Mockups</td>
