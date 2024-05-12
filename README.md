@@ -19,7 +19,7 @@
   </tr>
   <tr>
   <td>Final Report</td>
-  <td><a href="https://docs.google.com/document/d/1pz9uKa2pDM3LUxlal_3NgOXn4DgWTCrePJvrTx2Uat8/edit?usp=sharing">link</a></td>
+  <td><a href="https://docs.google.com/document/d/1pz9uKa2pDM3LUxlal_3NgOXn4DgWTCrePJvrTx2Uat8/edit?usp=sharing">Link</a></td>
   </tr>
 <!--   <tr>
     <td>D2</td>
