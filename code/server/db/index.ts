@@ -1,6 +1,6 @@
 import { createConnection, Connection } from 'mysql2/promise';
 import 'dotenv/config';
-import { createTableQuery } from '@/db/db.queries';
+import { createUsersTableQuery, createUserWorkoutTableQuery, createWorkoutsTableQuery } from '@/db/table.queries';
 
 const DB_USER = process.env.DB_USER;
 const DB_PASSWORD = process.env.DB_PASSWORD;
@@ -8,7 +8,11 @@ const DB_NAME = process.env.DB_NAME;
 
 export let connection: Connection = null;
 
-const loadSchemas = async () => await connection.execute(createTableQuery);
+const loadSchemas = async () => {
+  await connection.execute(createUsersTableQuery);
+  await connection.execute(createWorkoutsTableQuery);
+  await connection.execute(createUserWorkoutTableQuery);
+}
 export const connectToDatabase = async () => {
   try {
     connection = await createConnection({

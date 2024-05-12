@@ -10,6 +10,7 @@ import { decode } from '@/encryption/encoding';
 @Injectable()
 export class UsersGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
+    console.log('UsersGuard.canActivate()');
     const request = context.switchToHttp().getRequest();
     const token = this.extractTokenFromHeader(request);
     if (!token) {
