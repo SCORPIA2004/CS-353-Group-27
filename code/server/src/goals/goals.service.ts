@@ -14,17 +14,18 @@ import { makeSuggestion } from '@/utils/make.suggestion';
 @Injectable()
 export class GoalsService {
   async create(data: CreateGoalDto, user: JWTUser) {
-    if (user.role !== Role.USER) {
-      throw new HttpException('Unauthorized. Not a User.', HttpStatus.UNAUTHORIZED);
+    if (user.role !== Role.TRAINEE) {
+      throw new HttpException('Unauthorized. Not a Trainee.', HttpStatus.UNAUTHORIZED);
     }
     const [QueryResult] = await connection.execute(createGoal(data.title, data.goal, 0, data.target, getSimpleDate(), data.endDate, user.id));
 
     return (QueryResult as RowDataPacket).insertId;
+
   }
 
   async getAll(user: JWTUser) {
-    if (user.role !== Role.USER) {
-      throw new HttpException('Unauthorized. Not a User.', HttpStatus.UNAUTHORIZED);
+    if (user.role !== Role.TRAINEE) {
+      throw new HttpException('Unauthorized. Not a Trainee.', HttpStatus.UNAUTHORIZED);
     }
     const [QueryResult] = await connection.execute(getUserGoals(user.id));
 
@@ -32,8 +33,8 @@ export class GoalsService {
   }
 
   async update(data: UpdateGoalDto, user: JWTUser) {
-    if (user.role !== Role.USER) {
-      throw new HttpException('Unauthorized. Not a User.', HttpStatus.UNAUTHORIZED);
+    if (user.role !== Role.TRAINEE) {
+      throw new HttpException('Unauthorized. Not a Trainee.', HttpStatus.UNAUTHORIZED);
     }
 
     const [QueryResult] = await connection.execute(updateGoalValue(data.goalId, data.value));
@@ -42,8 +43,8 @@ export class GoalsService {
   }
 
   async getSuggestion(query: GetSuggestionDto, user: JWTUser) {
-    if (user.role !== Role.USER) {
-      throw new HttpException('Unauthorized. Not a User.', HttpStatus.UNAUTHORIZED);
+    if (user.role !== Role.TRAINEE) {
+      throw new HttpException('Unauthorized. Not a Trainee.', HttpStatus.UNAUTHORIZED);
     }
 
     const [QueryResult] = await connection.execute(getGoal(query.goalId));

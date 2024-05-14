@@ -1,10 +1,12 @@
 import { Body, Controller, Get, Post, UseGuards, UsePipes } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { loginDto } from './dto/login.dto';
-import { registerDto } from './dto/register.dto';
 import { ApiHeader, ApiResponse } from '@nestjs/swagger';
 import { UsersGuard } from '@/src/users/users.guard';
 import { SimplePipe } from '@/pipes';
+import { traineeRegisterDto } from '@/src/users/dto/trainee.register.dto';
+import { trainerRegisterDto } from '@/src/users/dto/trainer.register.dto';
+import { Role } from '@/enum/role.enum';
 
 @Controller('users')
 @UsePipes(SimplePipe)
@@ -23,11 +25,18 @@ export class UsersController {
     return await this.usersService.login(data);
   }
 
-  @Post('register')
+  @Post('register/trainer')
   @ApiResponse({ status: 200, description: 'Returns authorization token' })
   @ApiResponse({ status: 400, description: 'Validation failed: user already exists' })
-  async register(@Body() data: registerDto) {
-    return await this.usersService.register(data);
+  async TrainerRegister(@Body() data: trainerRegisterDto) {
+    return await this.usersService.register(data, Role.TRAINER);
+  }
+
+  @Post('register/trainee')
+  @ApiResponse({ status: 200, description: 'Returns authorization token' })
+  @ApiResponse({ status: 400, description: 'Validation failed: user already exists' })
+  async TraineeRegister(@Body() data: traineeRegisterDto) {
+    return await this.usersService.register(data, Role.TRAINEE);
   }
 
   @Get('check-token')

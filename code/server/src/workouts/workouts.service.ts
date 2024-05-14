@@ -28,7 +28,7 @@ export class WorkoutsService {
   }
 
   async logWorkout(data: logWorkoutDto, user: any) {
-    if (user.role !== Role.USER) {
+    if (user.role !== Role.TRAINEE) {
       throw new HttpException('Unauthorized. Not a User.', HttpStatus.UNAUTHORIZED);
     }
 
