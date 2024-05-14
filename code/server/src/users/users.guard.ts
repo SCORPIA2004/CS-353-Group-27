@@ -7,16 +7,21 @@ import {
 import { Request } from 'express';
 import { decode } from '@/encryption/encoding';
 
+export class JWTUser {
+  email: string;
+  role: string;
+  id: number;
+}
+
 @Injectable()
 export class UsersGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    console.log('UsersGuard.canActivate()');
     const request = context.switchToHttp().getRequest();
     const token = this.extractTokenFromHeader(request);
     if (!token) {
       throw new UnauthorizedException();
     }
-    const user = decode(token);
+    const user : JWTUser = decode(token);
 
     if (user) {
       request['user'] = user;

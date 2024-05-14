@@ -6,6 +6,7 @@ import { Role } from '@/enum/role.enum';
 import { connection } from '@/db';
 import { RowDataPacket } from 'mysql2';
 import { createWorkout, logWorkout, searchWorkout } from '@/db/workout.queries';
+import getSimpleDate from '@/utils/get.simple.date';
 
 @Injectable()
 export class WorkoutsService {
@@ -37,8 +38,7 @@ export class WorkoutsService {
       throw new HttpException('Workout not found', HttpStatus.NOT_FOUND);
     }
 
-    const date = new Date().toISOString().slice(0,10);
-    const [CreateResult] = await connection.execute(logWorkout(data.workoutId, user.id, data.duration, data.caloriesBurned, date));
+    const [CreateResult] = await connection.execute(logWorkout(data.workoutId, user.id, data.duration, data.caloriesBurned, getSimpleDate()));
 
     return (CreateResult as RowDataPacket).insertId;
   }
