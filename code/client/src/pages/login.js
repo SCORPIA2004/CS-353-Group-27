@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Card, Container, Flex, Heading, Text, TextField } from "@radix-ui/react-components";
+import { Button, Card, Container, Flex, Heading, Text, TextField } from "@radix-ui/themes";
 import { useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
