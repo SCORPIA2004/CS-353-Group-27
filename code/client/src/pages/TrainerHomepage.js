@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Button, Card, Container, Flex, Heading, Text } from "@radix-ui/react-components";
 import { useNavigate } from "react-router-dom";
-import useCheckAuthenticated from "../utils/useCheckAuthenticated"; 
+import useAuth from "../utils/useAuth";
 
 const HomePage = () => {
   const navigate = useNavigate();
-  const [isAuthenticated, isLoading] = useCheckAuthenticated(); 
+  const {isAuthenticated, isLoading} = useAuth();
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {

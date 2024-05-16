@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Button, Card, Container, Flex, Heading, Text } from "@radix-ui/themes";
 import { useNavigate } from "react-router-dom";
-import useCheckAuthenticated from "../utils/useCheckAuthenticated"; 
+import useAuth from "../utils/useAuth";
 
 //For trainee
 const HomePage = () => {
   const navigate = useNavigate();
-  const [isAuthenticated, isLoading] = useCheckAuthenticated(); 
+  const {isAuthenticated, isLoading} = useAuth();
   const [lastWorkouts, setLastWorkouts] = useState([]);
   const [nutritionPlans, setNutritionPlans] = useState([]);
 

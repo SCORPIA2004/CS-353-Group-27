@@ -1,11 +1,15 @@
 import {Avatar, Button, Flex, Heading, DropdownMenu, IconButton, Card} from "@radix-ui/themes";
-import {ArrowRightIcon} from "@radix-ui/react-icons";
-import useCheckAuthenticated from "./utils/useCheckAuthenticated";
+import {useEffect} from "react";
+import useAuth from "./utils/useAuth";
 
 const Navbar = () => {
-    const [isAuthenticated, isLoading] = useCheckAuthenticated();
+    const {isAuthenticated, logout} = useAuth();
 
-    if (!isAuthenticated && isLoading) {
+    useEffect(() => {
+        console.log(isAuthenticated)
+    }, [isAuthenticated]);
+
+    if (!isAuthenticated) {
         return (
             <nav style={{borderBottom: "1px gray solid"}}>
                 <Flex gap="3" justify='center' align='center' p='2'>
@@ -61,7 +65,7 @@ const Navbar = () => {
                             <Avatar fallback="YY"/>
                         </IconButton>
                     </DropdownMenu.Trigger>
-                    <DropdownMenu.Content>
+                    <DropdownMenu.Content onClick={logout}>
                         <DropdownMenu.Item>Logout</DropdownMenu.Item>
                     </DropdownMenu.Content>
                 </DropdownMenu.Root>
