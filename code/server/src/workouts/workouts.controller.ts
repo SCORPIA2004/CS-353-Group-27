@@ -40,6 +40,7 @@ export class WorkoutsController {
 
   @Post('log')
   @ApiResponse({ status: 200, description: 'Successfully logs a workout' })
+  @ApiResponse({ status: 404, description: 'Workout not found' })
   @ApiResponse({ status: 401, description: 'Unauthorized. Not logged in or not a user.' })
   async logWorkout(@Body() data: logWorkoutDto, @Req() req: Request) {
     const user = req['user'];

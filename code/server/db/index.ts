@@ -1,6 +1,7 @@
 import { createConnection, Connection } from 'mysql2/promise';
 import 'dotenv/config';
 import {
+  createConsultationsTableQuery,
   createGoalTableQuery, createTraineeTableQuery, createTrainersTableQuery,
   createUsersTableQuery,
   createUserWorkoutTableQuery,
@@ -20,6 +21,7 @@ const loadSchemas = async () => {
   await connection.execute(createWorkoutsTableQuery);
   await connection.execute(createUserWorkoutTableQuery);
   await connection.execute(createGoalTableQuery);
+  await connection.execute(createConsultationsTableQuery);
 }
 export const connectToDatabase = async () => {
   try {
