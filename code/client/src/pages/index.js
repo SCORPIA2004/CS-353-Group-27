@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Button, Card, Container, Flex, Heading, Text } from "@radix-ui/react-components";
+import { Box, Button, Card, Container, Flex, Heading, Text } from "@radix-ui/themes";
 import { useNavigate } from "react-router-dom";
 import useCheckAuthenticated from "../utils/useCheckAuthenticated"; 
 
