@@ -74,3 +74,14 @@ export const createGoalTableQuery = `
         FOREIGN KEY (user_id) REFERENCES users(id)
     )
 `;
+
+export const createConsultationsTableQuery = `
+    CREATE TABLE IF NOT EXISTS consultations (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        trainer_id INT NOT NULL,
+        trainee_id INT NOT NULL,
+        date DATE NOT NULL,
+        FOREIGN KEY (trainer_id) REFERENCES trainers(id),
+        FOREIGN KEY (trainee_id) REFERENCES trainee(id)
+    )
+`;
