@@ -26,3 +26,16 @@ code {
   50%{background-position:100% 50%}
   100%{background-position:0% 50%}
 }
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  position: absolute;
+  left: 7%;
+}
+input::-webkit-datetime-edit-fields-wrapper {
+  position: relative;
+  left: 12%;
+}
+input::-webkit-datetime-edit {
+  position: relative;
+  left: 12%;
+}
