@@ -48,4 +48,12 @@ export class UsersService {
       role: role,
     });
   }
+
+  async getUser(email: string) {
+    const [QueryResult] = await connection.execute(getUserQuery(email));
+
+    delete QueryResult[0].password;
+
+    return QueryResult[0]
+  }
 }
