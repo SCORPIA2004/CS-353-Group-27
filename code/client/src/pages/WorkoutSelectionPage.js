@@ -36,7 +36,7 @@ const WorkoutSelectionPage = () => {
     useEffect(() => {
         if (isAuthenticated && !isLoading) {
             fetchWorkouts();
-        } else if (!isAuthenticated) {
+        } else if (!isAuthenticated && !isLoading) {
             navigate('/login')
         }
     }, [isAuthenticated, isLoading]);
@@ -61,15 +61,7 @@ const WorkoutSelectionPage = () => {
                     ) : (
                         <Flex direction="column" gap={"4"}>
                             {workouts.map((workout, index) => (
-                                <Card css={{
-                                    padding: '$4',
-                                    borderRadius: '$default',
-                                    border: '1px solid $gray500',
-                                    boxShadow: '$1',
-                                    '&:hover': {
-                                        boxShadow: '$2',
-                                    },
-                                }}>
+                                <Card style={{cursor: "pointer"}} onClick={() => navigate(`/workout/${workout.id}`)}>
                                     <Flex justify="between" align="center" direction="row" gap="2">
                                         <div>
                                             <Flex direction={"column"}>

@@ -10,6 +10,7 @@ import LoginPage from "./pages/login";
 import HomePage from "./pages";
 import WorkoutSelectionPage from "./pages/WorkoutSelectionPage";
 import ActiveWorkoutPage from "./pages/ActiveWorkoutPage";
+import WorkoutPage from "./pages/WorkoutPage";
 
 
 const Router = () => {
@@ -22,6 +23,7 @@ const Router = () => {
                 <Route path="/register" element={<RegisterPage/>}/>
                 <Route path="/workout-selection" element={<WorkoutSelectionPage/>}/>
                 <Route path="/active-workout/:id" element={<ActiveWorkoutPage />} />
+                <Route path="/workout/:id" element={<WorkoutPage />} />
             </Routes>
         </BrowserRouter>
     )

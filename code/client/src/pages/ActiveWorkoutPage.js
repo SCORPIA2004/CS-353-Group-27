@@ -33,11 +33,14 @@ const ActiveWorkoutPage = ({match}) => {
     useEffect(() => {
         if (isAuthenticated && !isLoading) {
             fetchWorkout();
-            startTimer();
-        } else if (!isAuthenticated) {
+        } else if (!isAuthenticated && !isLoading) {
             navigate('/login');
         }
-    }, [id]);
+    }, [isLoading, isAuthenticated]);
+
+    useEffect(() => {
+        startTimer();
+    }, []);
 
     useEffect(() => {
         let interval;

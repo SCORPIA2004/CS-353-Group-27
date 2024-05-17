@@ -35,42 +35,40 @@ const Navbar = () => {
                 <Flex gap='5'>
                     <DropdownMenu.Root>
                         <DropdownMenu.Trigger>
-                            <Button variant="ghost">
+                            <Button style={{cursor: "pointer"}} variant="ghost">
                                 Workout & Training
                             </Button>
                         </DropdownMenu.Trigger>
                         <DropdownMenu.Content>
-                            <DropdownMenu.Item>My Workouts</DropdownMenu.Item>
-                            <DropdownMenu.Separator/>
-                            <DropdownMenu.Item>Create Program </DropdownMenu.Item>
+                            <DropdownMenu.Item style={{cursor: "pointer"}}>My Workouts</DropdownMenu.Item>
                         </DropdownMenu.Content>
                     </DropdownMenu.Root>
                     <DropdownMenu.Root>
                         <DropdownMenu.Trigger>
-                            <Button variant="ghost">
+                            <Button variant="ghost" style={{cursor: "pointer"}}>
                                 Progress
                             </Button>
                         </DropdownMenu.Trigger>
                         <DropdownMenu.Content>
-                            <DropdownMenu.Item>Goals</DropdownMenu.Item>
+                            <DropdownMenu.Item style={{cursor: "pointer"}}>Goals</DropdownMenu.Item>
                             <DropdownMenu.Separator/>
-                            <DropdownMenu.Item>Progress Reports</DropdownMenu.Item>
+                            <DropdownMenu.Item style={{cursor: "pointer"}}>Progress Reports</DropdownMenu.Item>
                         </DropdownMenu.Content>
                     </DropdownMenu.Root>
                     <DropdownMenu.Root>
                         <DropdownMenu.Trigger>
-                            <Button variant="ghost">
+                            <Button variant="ghost" style={{cursor: "pointer"}}>
                                 Trainers
                             </Button>
                         </DropdownMenu.Trigger>
                         <DropdownMenu.Content>
-                            <DropdownMenu.Item>Find Trainer </DropdownMenu.Item>
+                            <DropdownMenu.Item style={{cursor: "pointer"}}>Find Trainer </DropdownMenu.Item>
                         </DropdownMenu.Content>
                     </DropdownMenu.Root>
                 </Flex>
                 <DropdownMenu.Root>
                     <DropdownMenu.Trigger>
-                        <IconButton variant="ghost">
+                        <IconButton variant="ghost" style={{cursor: "pointer"}}>
                             <Avatar fallback={initials}/>
                         </IconButton>
                     </DropdownMenu.Trigger>
