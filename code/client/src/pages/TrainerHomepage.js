@@ -1,17 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Button, Card, Container, Flex, Heading, Text } from "@radix-ui/react-components";
+import { Box, Button, Card, Container, Flex, Heading, Text } from "@radix-ui/themes";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../utils/useAuth";
 
-const HomePage = () => {
+const TrainerHomePage = () => {
   const navigate = useNavigate();
   const {isAuthenticated, isLoading} = useAuth();
 
   useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
-      navigate('/login');
-    }
-
     if (isAuthenticated) {
     }
   }, [navigate, isLoading, isAuthenticated]);
@@ -37,9 +33,9 @@ const HomePage = () => {
         <Card>
           <Heading>Last Created Workouts</Heading>
           <Box css={{ overflowY: 'auto', maxHeight: '200px' }}>
-            {lastWorkouts.map((workout, index) => (
-              <Text key={index}>{workout.name} - {workout.date}</Text>
-            ))}
+            {/*{lastWorkouts.map((workout, index) => (*/}
+            {/*  <Text key={index}>{workout.name} - {workout.date}</Text>*/}
+            {/*))}*/}
           </Box>
         </Card>
       </Flex>
@@ -47,4 +43,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default TrainerHomePage;

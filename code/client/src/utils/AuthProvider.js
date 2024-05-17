@@ -1,6 +1,6 @@
-import {createContext, useEffect, useState} from "react";
-import {CHECK_TOKEN_URL} from "../helpers/ApiUrlHelper";
-import {useNavigate} from "react-router-dom";
+import { createContext, useEffect, useState } from "react";
+import { CHECK_TOKEN_URL } from "../helpers/ApiUrlHelper";
+import { useNavigate } from "react-router-dom";
 
 export const AuthContext = createContext();
 
@@ -12,12 +12,19 @@ const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         const token = localStorage.getItem('token');
+        const storedUser = localStorage.getItem('user');
+
         if (token) {
-            // Perform additional validation or verification of the token if needed
-            // For example, you might want to send the token to your backend for verification
-            setIsAuthenticated(true);
+            if (storedUser) {
+                setUser(JSON.parse(storedUser));
+                setIsAuthenticated(true);
+                setIsLoading(false);
+            } else {
+                login(token, ()=>{});
+            }
+        } else {
+            setIsLoading(false);
         }
-        setIsLoading(false);
     }, []);
 
     const login = async (token, goHome) => {
@@ -33,21 +40,17 @@ const AuthProvider = ({ children }) => {
                 // Token is valid
                 const userInfo = await response.json();
 
-                // Store the token in localStorage
+                // Store the token and user info in localStorage
                 localStorage.setItem('token', token);
+                localStorage.setItem('user', JSON.stringify(userInfo));
 
                 setUser(userInfo);
                 // Update the authentication state
                 setIsAuthenticated(true);
                 goHome();
-            } else if (response.status === 401) {
-                // Token is invalid or expired
-                console.error('Unauthorized: Token is either missing, invalid, or expired.');
-                setIsAuthenticated(false);
             } else {
-                // Handle other potential errors
-                console.error('An error occurred while checking the token.');
-                setIsAuthenticated(false);
+                // Token is invalid or expired
+                logout();
             }
         } catch (error) {
             console.error('An error occurred:', error);
@@ -57,7 +60,9 @@ const AuthProvider = ({ children }) => {
 
     const logout = () => {
         localStorage.removeItem('token');
+        localStorage.removeItem('user');
         setIsAuthenticated(false);
+        setUser(null);
     };
 
     const authContextValue = {
