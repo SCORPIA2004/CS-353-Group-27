@@ -1,13 +1,20 @@
 import {Avatar, Button, Flex, Heading, DropdownMenu, IconButton, Card} from "@radix-ui/themes";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import useAuth from "./utils/useAuth";
 
 const Navbar = () => {
-    const {isAuthenticated, logout} = useAuth();
+    const {isAuthenticated, logout, user} = useAuth();
+    const [initials, setInitials] = useState('');
 
     useEffect(() => {
-        console.log(isAuthenticated)
-    }, [isAuthenticated]);
+        if (isAuthenticated) {
+            const firstInitial = user.first_name.charAt(0).toUpperCase();
+            const lastInitial = user.last_name.charAt(0).toUpperCase();
+            setInitials(firstInitial + lastInitial);
+        } else {
+            setInitials('');
+        }
+    }, [isAuthenticated])
 
     if (!isAuthenticated) {
         return (
@@ -62,7 +69,7 @@ const Navbar = () => {
                 <DropdownMenu.Root>
                     <DropdownMenu.Trigger>
                         <IconButton variant="ghost">
-                            <Avatar fallback="YY"/>
+                            <Avatar fallback={initials}/>
                         </IconButton>
                     </DropdownMenu.Trigger>
                     <DropdownMenu.Content onClick={logout}>
