@@ -1,10 +1,12 @@
 import {Avatar, Button, Flex, Heading, DropdownMenu, IconButton, Card} from "@radix-ui/themes";
 import {useEffect, useState} from "react";
 import useAuth from "./utils/useAuth";
+import {useNavigate} from "react-router-dom";
 
 const Navbar = () => {
     const {isAuthenticated, logout, user} = useAuth();
     const [initials, setInitials] = useState('');
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (isAuthenticated) {
@@ -29,7 +31,7 @@ const Navbar = () => {
     return (
         <Card>
             <Flex gap="3" justify='between' align='center'>
-                <Heading>Fitness Tracker</Heading>
+                <Heading style={{cursor: 'pointer'}} onClick={() => navigate('/')}>Fitness Tracker</Heading>
                 <Flex gap='5'>
                     <DropdownMenu.Root>
                         <DropdownMenu.Trigger>
