@@ -47,4 +47,14 @@ export class WorkoutsController {
     return await this.workoutsService.logWorkout(data, user);
   }
 
+
+  @Get('log')
+    @ApiResponse({ status: 200, description: 'Returns workouts performed by user' })
+    @ApiResponse({ status: 401, description: 'Unauthorized. Not logged in.' })
+    async getLogs(@Req() req: Request) {
+      const user = req['user'];
+      return await this.workoutsService.getLogs(user);
+    }
+
+
 }

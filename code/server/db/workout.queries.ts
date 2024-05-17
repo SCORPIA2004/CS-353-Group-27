@@ -7,6 +7,9 @@ export const createWorkout = (title: string, description: string, difficulty: Di
 export const logWorkout = (workoutId: number, userId: number, duration: number, caloriesBurned: number, date: string) =>
   `INSERT INTO user_workout (workout_id, user_id, duration, calories_burned, date) VALUES (${workoutId}, ${userId}, ${duration}, ${caloriesBurned}, '${date}')`;
 
+export const searchWorkoutLogs = (userId: number) =>
+    `SELECT * FROM user_workout WHERE user_id = ${userId}`;
+
 export const searchWorkout = (id?: number, title?: string, difficulty?: Difficulty, duration?: number, intensity?: Intensity) => {
   let query = `SELECT * FROM workouts WHERE 1`;
 
