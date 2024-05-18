@@ -36,3 +36,7 @@ export const searchWorkout = (id?: number, title?: string, difficulty?: Difficul
   return query;
 };
 
+export const getWorkoutsCreatedByMe = (trainerId: number) => {
+  return `SELECT * FROM workouts WHERE trainer_id = ${trainerId}`;
+}
+
