@@ -15,6 +15,7 @@ import {
   GET_TRAINEES_URL,
   GET_MY_WORKOUTS_URL,
   DELETE_WORKOUT_URL,
+  UPDATE_WORKOUT_URL,
 } from "../helpers/ApiUrlHelper";
 import Modal from "../components/Modal";
 
@@ -144,6 +145,28 @@ const TrainerHomePage = () => {
       console.error("Error deleting workout:", error);
     }
   };
+
+
+
+ const updateWorkout = async (workoutId, updateData) => {
+   try {
+     const response = await fetch(`${UPDATE_WORKOUT_URL}/${workoutId}`, {
+       method: "PUT",
+       headers: {
+         "Content-Type": "application/json",
+         Authorization: `Bearer ${localStorage.getItem("token")}`,
+       },
+       body: JSON.stringify(updateData),
+     });
+     if (!response.ok) throw new Error("Failed to update workout");
+     const result = await response.json();
+     alert(result.message);
+     fetchMyWorkouts(); // Refresh the workouts list after update
+     handleCloseModal(); // Close the modal after update
+   } catch (error) {
+     console.error("Error updating workout:", error);
+   }
+ };
 
 
   return (
@@ -280,6 +303,7 @@ const TrainerHomePage = () => {
               workoutDetails={selectedWorkout}
               onClose={handleCloseModal}
               deleteWorkout={deleteWorkout}
+              updateWorkout={updateWorkout}
             />
           )}
         </div>

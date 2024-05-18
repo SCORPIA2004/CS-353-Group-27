@@ -1,5 +1,5 @@
 import { Flex } from "@radix-ui/themes";
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
 const Background = styled.div`
@@ -63,7 +63,25 @@ const Details = styled.p`
   text-align: left;
 `;
 
-// button is blue
+const Input = styled.input`
+  padding: 10px;
+  margin-bottom: 10px;
+  border: none;
+  border-radius: 5px;
+  font-size: 18px;
+  width: 100%;
+`;
+
+const TextArea = styled.textarea`
+  padding: 10px;
+  margin-bottom: 10px;
+  border: none;
+  border-radius: 5px;
+  font-size: 18px;
+  width: 100%;
+  resize: none;
+`;
+
 const Button = styled.button`
   padding: 10px 20px;
   margin-top: 20px;
@@ -80,7 +98,20 @@ const Button = styled.button`
   }
 `;
 
-const Modal = ({ workoutDetails, onClose, deleteWorkout }) => {
+const Modal = ({ workoutDetails, onClose, updateWorkout, deleteWorkout }) => {
+  const [editMode, setEditMode] = useState(false);
+  const [formData, setFormData] = useState(workoutDetails);
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    updateWorkout(formData.id, formData);
+    setEditMode(false);
+  };
+
   if (!workoutDetails) {
     console.error("workoutDetails is undefined");
     return null; // or handle this scenario appropriately
@@ -91,15 +122,56 @@ const Modal = ({ workoutDetails, onClose, deleteWorkout }) => {
       <ModalWrapper>
         <CloseButton onClick={onClose}>&times;</CloseButton>
         <ContentArea>
-          <Title>{workoutDetails.title}</Title>
-          <Subtitle>
-            ⏰{workoutDetails.duration} mins, 💪{workoutDetails.difficulty}
-          </Subtitle>
-          <Details>{workoutDetails.description}</Details>
-          <Flex gap="10px" justify="center">
-            <Button>✏️</Button>
-            <Button onClick={() => deleteWorkout(workoutDetails.id)}>🗑️</Button>
-          </Flex>
+          {editMode ? (
+            <form onSubmit={handleSubmit}>
+              <Input
+                name="title"
+                value={formData.title}
+                onChange={handleChange}
+              />
+              <TextArea
+                name="description"
+                value={formData.description}
+                onChange={handleChange}
+              />
+              <Input
+                name="duration"
+                type="number"
+                value={formData.duration}
+                onChange={handleChange}
+              />
+              <Input
+                name="difficulty"
+                value={formData.difficulty}
+                onChange={handleChange}
+              />
+              <Input
+                name="intensity"
+                value={formData.intensity}
+                onChange={handleChange}
+              />
+              <Flex gap="10px" justify="center">
+                <Button type="submit">Save</Button>
+                <Button type="button" onClick={() => setEditMode(false)}>
+                  Cancel
+                </Button>
+              </Flex>
+            </form>
+          ) : (
+            <>
+              <Title>{workoutDetails.title}</Title>
+              <Subtitle>
+                ⏰{workoutDetails.duration} mins, 💪{workoutDetails.difficulty}
+              </Subtitle>
+              <Details>{workoutDetails.description}</Details>
+              <Flex gap="10px" justify="center">
+                <Button onClick={() => setEditMode(true)}>✏️</Button>
+                <Button onClick={() => deleteWorkout(workoutDetails.id)}>
+                  🗑️
+                </Button>
+              </Flex>
+            </>
+          )}
         </ContentArea>
       </ModalWrapper>
     </Background>

@@ -6,7 +6,8 @@ import {
   searchConsultation,
   searchTrainer,
   deleteWorkoutQuery,
-  deleteUserWorkoutQuery
+  deleteUserWorkoutQuery,
+  updateWorkoutQuery,
 } from '@/db/training.queries';
 import { ScheduleConsultationDto } from '@/src/training/dto/schedule.dto';
 import { JWTUser } from '@/src/users/users.guard';
@@ -159,22 +160,7 @@ export class TrainingService {
     return traineeProgress;
   }
 
-  // async deleteWorkout(workoutId: number, user: JWTUser) {
-  //   if (user.role !== Role.TRAINER) {
-  //     throw new HttpException(
-  //       'Unauthorized. Not a Trainer.',
-  //       HttpStatus.UNAUTHORIZED,
-  //     );
-  //   }
 
-  //   const [result] = await connection.execute(deleteWorkoutQuery(workoutId));
-
-  // if ((result as mysql.ResultSetHeader).affectedRows === 0) {
-  //   throw new HttpException('Workout not found', HttpStatus.NOT_FOUND);
-  // }
-
-  //   return { message: 'Workout deleted successfully' };
-  // }
 
 
 
@@ -212,5 +198,33 @@ export class TrainingService {
 
 
 
+
+
+    async updateWorkout(workoutId: number, user: JWTUser, updateData: any) {
+    if (user.role !== Role.TRAINER) {
+      throw new HttpException('Unauthorized. Not a Trainer.', HttpStatus.UNAUTHORIZED);
+    }
+
+    const { title, description, duration, difficulty, intensity } = updateData;
+
+    try {
+
+    const [result] = await connection.execute(updateWorkoutQuery(workoutId, title, description, duration, difficulty, intensity));
+
+      if ((result as mysql.ResultSetHeader).affectedRows === 0) {
+        throw new HttpException('Workout not found', HttpStatus.NOT_FOUND);
+      }
+
+      return { message: 'Workout updated successfully' };
+    } catch (error) {
+      console.error("Error updating workout:", error);
+      throw new HttpException('Internal Server Error', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+
+
+
+  
 
 }

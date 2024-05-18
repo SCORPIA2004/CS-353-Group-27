@@ -4,7 +4,7 @@ import { ApiResponse } from '@nestjs/swagger';
 import { JWTUser, UsersGuard } from '@/src/users/users.guard';
 import { TrainingService } from '@/src/training/training.service';
 import { ScheduleConsultationDto } from '@/src/training/dto/schedule.dto';
-import { Body, Controller, Get, Param, Post, Query, Req, UseGuards, UsePipes, Delete } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query, Req, UseGuards, UsePipes, Delete, Put } from '@nestjs/common';
 import { ReviewProgressDto } from '@/src/training/dto/review.progress.dto';
 
 @Controller('training')
@@ -112,5 +112,19 @@ export class TrainingController {
   ) {
     const user: JWTUser = req['user'];
     return this.trainingService.deleteWorkout(workoutId, user);
+  }
+
+  @Put('workout/:workoutId')
+  async updateWorkout(
+    @Param('workoutId') workoutId: number,
+    @Body() updateData: any,
+    @Req() req: Request,
+  ) {
+    const user: JWTUser = req['user'];
+    return await this.trainingService.updateWorkout(
+      workoutId,
+      user,
+      updateData,
+    );
   }
 }
