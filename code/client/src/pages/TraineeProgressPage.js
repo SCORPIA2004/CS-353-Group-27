@@ -2,11 +2,15 @@ import React, { useEffect, useState } from "react";
 import { Box, Card, Container, Flex, Heading, Text } from "@radix-ui/themes";
 import { useParams } from "react-router-dom";
 import { GET_TRAINEE_PROGRESS_URL } from "../helpers/ApiUrlHelper";
+import { useNavigate } from "react-router-dom";
+import useAuth from "../utils/useAuth";
 
 const TraineeProgressPage = () => {
   const { traineeId } = useParams();
   const [progress, setProgress] = useState(null);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
+  const { isAuthenticated, isLoading } = useAuth();
 
   const fetchProgress = async () => {
     try {
@@ -26,8 +30,12 @@ const TraineeProgressPage = () => {
   };
 
   useEffect(() => {
-    fetchProgress();
-  }, [traineeId]);
+    if (isAuthenticated) {
+      fetchProgress();
+    } else if (!isLoading) {
+      navigate("/login"); 
+    }
+  }, [traineeId, navigate, isLoading, isAuthenticated]);
 
   const style = {
     width: "100%",

@@ -15,8 +15,8 @@ import { GET_LEADERBOARD_URL } from "../helpers/ApiUrlHelper";
 const Leaderboard = () => {
   const [leaderboard, setLeaderboard] = useState([]);
   const [error, setError] = useState(null);
-    const navigate = useNavigate();
-    const { isAuthenticated, isLoading } = useAuth();
+  const navigate = useNavigate();
+  const { isAuthenticated, isLoading } = useAuth();
 
   const fetchLeaderboard = async () => {
     try {
@@ -37,6 +37,8 @@ const Leaderboard = () => {
   useEffect(() => {
     if (isAuthenticated) {
       fetchLeaderboard();
+    } else if (!isLoading) {
+      navigate("/login");
     }
   }, [navigate, isLoading, isAuthenticated]);
 
