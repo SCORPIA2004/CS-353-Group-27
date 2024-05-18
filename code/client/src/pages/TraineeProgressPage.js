@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Card, Container, Flex, Heading, Text } from "@radix-ui/themes";
+import { Box, Card, Container, Flex, Heading, Text, Button } from "@radix-ui/themes";
 import { useParams } from "react-router-dom";
 import { GET_TRAINEE_PROGRESS_URL } from "../helpers/ApiUrlHelper";
 import { useNavigate } from "react-router-dom";
@@ -21,7 +21,6 @@ const TraineeProgressPage = () => {
       });
       if (!response.ok) throw new Error("Failed to fetch progress");
       const data = await response.json();
-      console.log("Fetched progress data:", data); // Log the data
       setProgress(data);
     } catch (error) {
       console.error("Error fetching progress:", error);
@@ -165,6 +164,12 @@ const TraineeProgressPage = () => {
             ))}
           </Box>
         </Card>
+
+        <Flex justify="center">
+          <Button style={{ cursor: "pointer" }} onClick={() => navigate("/")}>
+            Back
+          </Button>
+        </Flex>
       </Flex>
     </Container>
   );
