@@ -1,4 +1,4 @@
-import { IsArray, IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, MaxLength } from 'class-validator';
+import {IsEnum, IsNumberString, IsOptional, IsString, MaxLength} from 'class-validator';
 import { ApiProperty } from "@nestjs/swagger";
 import { Difficulty } from '@/enum/difficulty.enum';
 import { Intensity } from '@/enum/intensity.enum';
@@ -7,7 +7,7 @@ export class searchWorkoutDto {
 
   @ApiProperty({ example: '123', description: 'Workout ID' })
   @IsOptional()
-  @IsNumber({}, { message: 'Workout ID must be a number' })
+  @IsNumberString({}, { message: 'Workout ID must be a number' })
   id?: number;
 
   @ApiProperty({ example: 'Cardio Day', description: 'Workout title' })
@@ -23,7 +23,7 @@ export class searchWorkoutDto {
 
   @ApiProperty({ example: 45, description: 'Estimated duration of the workout in minutes' })
   @IsOptional()
-  // @IsNumber({}, { message: 'Workout duration must be a number' })
+  @IsNumberString({}, { message: 'Workout duration must be a number' })
   duration?: number;
 
   @ApiProperty({ example: 'high', description: 'Intensity level of the workout' })
