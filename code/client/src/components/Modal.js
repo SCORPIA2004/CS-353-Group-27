@@ -80,29 +80,30 @@ const Button = styled.button`
   }
 `;
 
-const Modal = ({ workoutDetails, onClose }) => {
+const Modal = ({ workoutDetails, onClose, deleteWorkout }) => {
   if (!workoutDetails) {
     console.error("workoutDetails is undefined");
     return null; // or handle this scenario appropriately
   }
 
   return (
-  <Background>
-    <ModalWrapper>
-      <CloseButton onClick={onClose}>&times;</CloseButton>
-      <ContentArea>
-        <Title>{workoutDetails.title}</Title>
-        <Subtitle>
-          ⏰{workoutDetails.duration} mins, 💪{workoutDetails.difficulty}
-        </Subtitle>
-        <Details>{workoutDetails.description}</Details>
-        <Flex gap="10px" justify="center">
-          <Button>✏️</Button>
-          <Button>🗑️</Button>
-        </Flex>
-      </ContentArea>
-    </ModalWrapper>
-  </Background>
-)};
+    <Background>
+      <ModalWrapper>
+        <CloseButton onClick={onClose}>&times;</CloseButton>
+        <ContentArea>
+          <Title>{workoutDetails.title}</Title>
+          <Subtitle>
+            ⏰{workoutDetails.duration} mins, 💪{workoutDetails.difficulty}
+          </Subtitle>
+          <Details>{workoutDetails.description}</Details>
+          <Flex gap="10px" justify="center">
+            <Button>✏️</Button>
+            <Button onClick={() => deleteWorkout(workoutDetails.id)}>🗑️</Button>
+          </Flex>
+        </ContentArea>
+      </ModalWrapper>
+    </Background>
+  );
+};
 
 export default Modal;

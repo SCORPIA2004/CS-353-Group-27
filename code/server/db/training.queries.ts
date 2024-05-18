@@ -40,6 +40,14 @@ export const searchConsultation = (trainerId?: number, traineeId?: number, date?
 
   return query;
 }
+export const deleteUserWorkoutQuery = (workoutId: number) => {
+  return `DELETE FROM user_workout WHERE workout_id = ${workoutId}`;
+};
+
+export const deleteWorkoutQuery = (workoutId: number) => {
+  return `DELETE FROM workouts WHERE id = ${workoutId}`;
+};
+
 
 
 export const getTraineesQuery = (trainerId?: number) => {
@@ -51,5 +59,6 @@ export const getTraineesQuery = (trainerId?: number) => {
         WHERE c.trainer_id = ${trainerId}
     `;
   return query;
+  
 };
 

@@ -14,6 +14,7 @@ import {
   GET_CONSULTATIONS_URL,
   GET_TRAINEES_URL,
   GET_MY_WORKOUTS_URL,
+  DELETE_WORKOUT_URL,
 } from "../helpers/ApiUrlHelper";
 import Modal from "../components/Modal";
 
@@ -124,6 +125,25 @@ const TrainerHomePage = () => {
     }
   }
 
+
+
+  const deleteWorkout = async (workoutId) => {
+    try {
+      const response = await fetch(`${DELETE_WORKOUT_URL}/${workoutId}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      if (!response.ok) throw new Error("Failed to delete workout");
+      const result = await response.json();
+      alert(result.message);
+      fetchMyWorkouts(); // Refresh the workouts list after deletion
+      handleCloseModal(); // Close the modal after deletion
+    } catch (error) {
+      console.error("Error deleting workout:", error);
+    }
+  };
 
 
   return (
@@ -259,6 +279,7 @@ const TrainerHomePage = () => {
             <Modal
               workoutDetails={selectedWorkout}
               onClose={handleCloseModal}
+              deleteWorkout={deleteWorkout}
             />
           )}
         </div>

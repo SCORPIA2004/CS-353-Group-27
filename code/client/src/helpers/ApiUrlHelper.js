@@ -18,4 +18,5 @@ export const GET_TRAINEE_PROGRESS_URL = `${SERVER_URL}/training/trainee-progress
 export const GET_LEADERBOARD_URL = `${SERVER_URL}/leaderboard`;
 
 
+export const DELETE_WORKOUT_URL = `${SERVER_URL}/training/workout`;
 

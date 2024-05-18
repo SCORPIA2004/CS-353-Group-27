@@ -5,6 +5,8 @@ import {
   createConsultation,
   searchConsultation,
   searchTrainer,
+  deleteWorkoutQuery,
+  deleteUserWorkoutQuery
 } from '@/db/training.queries';
 import { ScheduleConsultationDto } from '@/src/training/dto/schedule.dto';
 import { JWTUser } from '@/src/users/users.guard';
@@ -14,6 +16,9 @@ import { ReviewProgressDto } from '@/src/training/dto/review.progress.dto';
 import { getUserGoals } from '@/db/goal.queries';
 import { getTraineesQuery } from '@/db/training.queries';
 import { getWorkoutsCreatedByMe } from '@/db/workout.queries';
+// import { QueryResult } as QueryResult2 from 'mysql2';
+import * as mysql from 'mysql2';
+
 
 @Injectable()
 export class TrainingService {
@@ -152,5 +157,52 @@ export class TrainingService {
     };
 
     return traineeProgress;
+  }
+
+  // async deleteWorkout(workoutId: number, user: JWTUser) {
+  //   if (user.role !== Role.TRAINER) {
+  //     throw new HttpException(
+  //       'Unauthorized. Not a Trainer.',
+  //       HttpStatus.UNAUTHORIZED,
+  //     );
+  //   }
+
+  //   const [result] = await connection.execute(deleteWorkoutQuery(workoutId));
+
+  // if ((result as mysql.ResultSetHeader).affectedRows === 0) {
+  //   throw new HttpException('Workout not found', HttpStatus.NOT_FOUND);
+  // }
+
+  //   return { message: 'Workout deleted successfully' };
+  // }
+
+  async deleteWorkout(workoutId: number, user: JWTUser) {
+    if (user.role !== Role.TRAINER) {
+      throw new HttpException(
+        'Unauthorized. Not a Trainer.',
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
+
+    try {
+      // Delete related rows in the user_workout table
+      await connection.execute(deleteUserWorkoutQuery(workoutId));
+
+      // Delete the workout
+      // const [result] = await connection.execute<RowDataPacket[]>(
+      const [result] = await connection.execute(deleteWorkoutQuery(workoutId));
+
+  if ((result as mysql.ResultSetHeader).affectedRows === 0) {
+        throw new HttpException('Workout not found', HttpStatus.NOT_FOUND);
+      }
+
+      return { message: 'Workout deleted successfully' };
+    } catch (error) {
+      console.error('Error deleting workout:', error);
+      throw new HttpException(
+        'Internal Server Error',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 }

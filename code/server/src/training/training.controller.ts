@@ -4,7 +4,7 @@ import { ApiResponse } from '@nestjs/swagger';
 import { JWTUser, UsersGuard } from '@/src/users/users.guard';
 import { TrainingService } from '@/src/training/training.service';
 import { ScheduleConsultationDto } from '@/src/training/dto/schedule.dto';
-import { Body, Controller, Get, Param, Post, Query, Req, UseGuards, UsePipes } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query, Req, UseGuards, UsePipes, Delete } from '@nestjs/common';
 import { ReviewProgressDto } from '@/src/training/dto/review.progress.dto';
 
 @Controller('training')
@@ -73,11 +73,7 @@ export class TrainingController {
     @Param('traineeId') traineeId: number,
   ) {
     const user: JWTUser = req['user'];
-    // console.log("*** HERE 2", this.trainingService.getTraineeProgress(user, traineeId));
-    // const progress = await this.trainingService.getTraineeProgress(user, traineeId);
-    // console.log("*** HERE 221312", progress);
 
-    // return progress;
     return this.trainingService.getTraineeProgress(user, traineeId);
   }
 
@@ -101,5 +97,20 @@ export class TrainingController {
   async getWorkouts(@Req() req: Request) {
     const user: JWTUser = req['user'];
     return this.trainingService.getWorkoutsCreatedByMe(user);
+  }
+
+  @Delete('workout/:workoutId')
+  @ApiResponse({ status: 200, description: 'Workout deleted successfully' })
+  @ApiResponse({ status: 404, description: 'Workout not found' })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized. Not logged in or not a trainer.',
+  })
+  async deleteWorkout(
+    @Param('workoutId') workoutId: number,
+    @Req() req: Request,
+  ) {
+    const user: JWTUser = req['user'];
+    return this.trainingService.deleteWorkout(workoutId, user);
   }
 }
