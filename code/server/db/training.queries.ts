@@ -49,6 +49,16 @@ export const deleteWorkoutQuery = (workoutId: number) => {
 };
 
 
+export const updateWorkoutQuery = (workoutId: number, title: string, description: string, duration: number, difficulty: string, intensity: string) => {
+  return `
+    UPDATE workouts 
+    SET title = '${title}', description = '${description}', duration = ${duration}, difficulty = '${difficulty}', intensity = '${intensity}'
+    WHERE id = ${workoutId}
+  `;
+};
+
+
+
 
 export const getTraineesQuery = (trainerId?: number) => {
   let query = `

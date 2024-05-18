@@ -176,6 +176,11 @@ export class TrainingService {
   //   return { message: 'Workout deleted successfully' };
   // }
 
+
+
+
+
+
   async deleteWorkout(workoutId: number, user: JWTUser) {
     if (user.role !== Role.TRAINER) {
       throw new HttpException(
@@ -189,10 +194,9 @@ export class TrainingService {
       await connection.execute(deleteUserWorkoutQuery(workoutId));
 
       // Delete the workout
-      // const [result] = await connection.execute<RowDataPacket[]>(
-      const [result] = await connection.execute(deleteWorkoutQuery(workoutId));
+    const [result] = await connection.execute(deleteWorkoutQuery(workoutId));
 
-  if ((result as mysql.ResultSetHeader).affectedRows === 0) {
+      if ((result as mysql.ResultSetHeader).affectedRows === 0) {
         throw new HttpException('Workout not found', HttpStatus.NOT_FOUND);
       }
 
@@ -205,4 +209,8 @@ export class TrainingService {
       );
     }
   }
+
+
+
+
 }
