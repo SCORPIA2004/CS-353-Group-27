@@ -27,11 +27,11 @@ export const searchConsultation = (trainerId?: number, traineeId?: number, date?
   let query = `SELECT * FROM consultations WHERE 1`;
 
   if (trainerId !== undefined) {
-    query += ` AND trainerId = ${trainerId}`;
+    query += ` AND trainer_id = ${trainerId}`;
   }
 
   if (traineeId !== undefined) {
-    query += ` AND traineeId = ${traineeId}`;
+    query += ` AND trainee_id = ${traineeId}`;
   }
 
   if (date !== undefined) {
@@ -40,3 +40,16 @@ export const searchConsultation = (trainerId?: number, traineeId?: number, date?
 
   return query;
 }
+
+
+export const getTraineesQuery = (trainerId?: number) => {
+  let query = `
+        SELECT *
+        FROM users u
+        INNER JOIN trainee t ON t.id = u.id
+        INNER JOIN consultations c ON c.trainee_id = t.id
+        WHERE c.trainer_id = ${trainerId}
+    `;
+  return query;
+};
+

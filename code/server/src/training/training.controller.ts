@@ -54,4 +54,13 @@ export class TrainingController {
     return this.trainingService.reviewProgress(data, user);
   }
 
+
+  @Get('trainees')
+  @ApiResponse({ status: 200, description: 'Returns Trainees' })
+  @ApiResponse({ status: 401, description: 'Unauthorized. Not logged in or not a trainer.' })
+  async getTrainees(@Req() req: Request) {
+    const user: JWTUser = req['user'];
+    return this.trainingService.getTrainees(user);
+  }
+
 }

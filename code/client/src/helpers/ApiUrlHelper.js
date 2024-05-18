@@ -10,3 +10,7 @@ export const CHECK_TOKEN_URL = `${USERS_URL}/check-token`;
 
 export const WORKOUT_LOG_URL = `${WORKOUTS_URL}/log`;
 
+export const GET_CONSULTATIONS_URL = `${SERVER_URL}/training/consultation`;
+export const GET_TRAINEES_URL = `${SERVER_URL}/training/trainees`;
+
+
