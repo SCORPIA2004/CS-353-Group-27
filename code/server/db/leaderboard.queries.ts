@@ -4,7 +4,6 @@ export const getLeaderboardQuery = () =>
     u.id, 
     u.first_name, 
     u.last_name, 
-    u.gender, 
     u.dob,
     (COALESCE(completed_goals.completed_goal_count, 0) + COALESCE(workout_scores.total_workout_score, 0)) AS score
 FROM 
