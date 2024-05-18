@@ -42,13 +42,15 @@ const TraineeProgressPage = () => {
   }
 
   const formatDate = (dateString) => {
-      const date = new Date(dateString);
-      const day = date.getDate();
-      const month = date.getMonth() + 1;
-      const year = date.getFullYear();
-      return `${day}-${month}-${year}`;
-    };
+    const date = new Date(dateString);
+    const day = date.getDate();
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear();
+    return `${day}-${month}-${year}`;
+  };
 
+  // Set to track unique goal IDs
+  const uniqueGoalIds = new Set();
 
   return (
     <Container style={style}>
@@ -57,7 +59,7 @@ const TraineeProgressPage = () => {
 
         {/* Trainee Info */}
         <Card>
-          <Heading>Trainee Info</Heading>
+          <Heading>Trainee Info 🔍</Heading>
           <Box>
             <Card style={{ marginBlock: "15px", fontWeight: "bold" }}>
               <Flex direction={"row"} justify={"between"}>
@@ -83,7 +85,7 @@ const TraineeProgressPage = () => {
 
         {/* Goals */}
         <Card>
-          <Heading>Goals</Heading>
+          <Heading>Goals 🎯</Heading>
           <Box css={{ overflowY: "auto", maxHeight: "200px" }}>
             <Card style={{ marginBlock: "15px", fontWeight: "bold" }}>
               <Flex direction={"row"} justify={"between"}>
@@ -96,21 +98,29 @@ const TraineeProgressPage = () => {
               </Flex>
             </Card>
 
-            {progress.goals.map((goal, index) => (
-              <Card
-                style={{ marginBlock: "10px", cursor: "pointer" }}
-                key={index}
-              >
-                <Flex direction={"row"} justify={"between"}>
-                  <Text>{goal.goal_title}</Text>
-                  <Text>{goal.goal_type}</Text>
-                  <Text>{goal.current_value}</Text>
-                  <Text>{goal.target}</Text>
-                  <Text>{formatDate(goal.start_date)}</Text>
-                  <Text>{formatDate(goal.end_date)}</Text>
-                </Flex>
-              </Card>
-            ))}
+            {progress.goals.map((goal, index) => {
+              // Skip duplicate goals based on goal_id
+              if (uniqueGoalIds.has(goal.goal_id)) {
+                return null;
+              }
+              uniqueGoalIds.add(goal.goal_id);
+
+              return (
+                <Card
+                  style={{ marginBlock: "10px", cursor: "pointer" }}
+                  key={index}
+                >
+                  <Flex direction={"row"} justify={"between"}>
+                    <Text>{goal.goal_title}</Text>
+                    <Text>{goal.goal_type}</Text>
+                    <Text>{goal.current_value}</Text>
+                    <Text>{goal.target}</Text>
+                    <Text>{formatDate(goal.start_date)}</Text>
+                    <Text>{formatDate(goal.end_date)}</Text>
+                  </Flex>
+                </Card>
+              );
+            })}
           </Box>
         </Card>
 

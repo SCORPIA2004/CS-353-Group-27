@@ -18,6 +18,7 @@ export const getUserGoals = (userId: number) => `
     u.last_name,
     t.height,
     t.weight,
+    g.id AS goal_id,
     g.title AS goal_title,
     g.goal AS goal_type,
     g.current_value,

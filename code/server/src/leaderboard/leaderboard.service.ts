@@ -1,6 +1,7 @@
 import { Injectable, Query } from '@nestjs/common';
 import { connection } from '@/db';
 import { getLeaderboardQuery } from '@/db/leaderboard.queries';
+import { RowDataPacket } from 'mysql2';
 
 @Injectable()
 export class LeaderboardService {
@@ -9,7 +10,8 @@ export class LeaderboardService {
   // score is calculated by the sum of the number of goals the user completed and the number
   // of workouts the user completed multiplied by its difficulty
   async getLeaderboard() {
-    const [QueryResult] = await connection.execute(getLeaderboardQuery());
-    return QueryResult;
+    const query = getLeaderboardQuery();
+    const [rows] = await connection.execute<RowDataPacket[]>(query);
+    return rows;
   }
 }

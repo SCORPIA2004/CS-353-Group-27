@@ -134,6 +134,7 @@ export class TrainingService {
       height: QueryResult[0].height,
       weight: QueryResult[0].weight,
       goals: QueryResult.map((row) => ({
+        goal_id: row.goal_id,
         goal_title: row.goal_title,
         goal_type: row.goal_type,
         current_value: row.current_value,

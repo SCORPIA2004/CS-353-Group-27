@@ -142,6 +142,7 @@ const TrainerHomePage = () => {
                 <Text>Last name</Text>
                 <Text>Height</Text>
                 <Text>Weight</Text>
+                <Text>Track Progress</Text>
               </Flex>
             </Card>
 
