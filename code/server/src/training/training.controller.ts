@@ -127,4 +127,10 @@ export class TrainingController {
       updateData,
     );
   }
+
+  @Post('workout')
+  async createWorkout(@Body() createData: any, @Req() req: Request) {
+    const user: JWTUser = req['user'];
+    return await this.trainingService.createWorkout(user, createData);
+  }
 }

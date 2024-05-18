@@ -7,7 +7,10 @@ import {
   Flex,
   Heading,
   Text,
+  TextField,
 } from "@radix-ui/themes";
+
+
 import { useNavigate } from "react-router-dom";
 import useAuth from "../utils/useAuth";
 import {
@@ -16,6 +19,7 @@ import {
   GET_MY_WORKOUTS_URL,
   DELETE_WORKOUT_URL,
   UPDATE_WORKOUT_URL,
+  CREATE_WORKOUT_URL,
 } from "../helpers/ApiUrlHelper";
 import Modal from "../components/Modal";
 
@@ -28,6 +32,16 @@ const TrainerHomePage = () => {
   const [trainees, setTrainees] = useState([]);
   const [myWorkouts, setMyWorkouts] = useState([]);
   const [selectedWorkout, setSelectedWorkout] = useState(null);
+  const [newWorkout, setNewWorkout] = useState({
+    title: "",
+    description: "",
+    duration: "",
+    difficulty: "",
+    required_equipment: "",
+    intensity: "",
+    
+  });
+  const [isCreating, setIsCreating] = useState(false);
   const [hovered, setHovered] = useState(false);
 
 
@@ -169,6 +183,46 @@ const TrainerHomePage = () => {
  };
 
 
+
+  const createWorkout = async () => {
+    try {
+      const response = await fetch(CREATE_WORKOUT_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify(newWorkout),
+      });
+      if (!response.ok) throw new Error("Failed to create workout");
+      const result = await response.json();
+      alert(result.message);
+      fetchMyWorkouts(); // Refresh the workouts list after creation
+      setIsCreating(false); // Close the creation form
+      setNewWorkout({
+        title: "",
+        description: "",
+        duration: "",
+        difficulty: "",
+        required_equipment: "",
+        intensity: "",
+      });
+    } catch (error) {
+      console.error("Error creating workout:", error);
+    }
+  };
+
+  const handleChange = (e) => {
+    setNewWorkout({ ...newWorkout, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    createWorkout();
+  };
+
+
+
   return (
     <Container style={style}>
       <Flex justify="center" direction="column" py={"4"} gap={"4"}>
@@ -181,7 +235,65 @@ const TrainerHomePage = () => {
           >
             Leaderboard
           </Button>
+
+          <Button
+            style={{ cursor: "pointer" }}
+            onClick={() => setIsCreating(true)}
+          >
+            Create Workout
+          </Button>
         </Flex>
+
+        {/* Form to create a new workout */}
+        {isCreating && (
+          <Card>
+            <Heading>Create New Workout</Heading>
+            <form onSubmit={handleSubmit}>
+              <TextField.Root
+                name="title"
+                placeholder="Title"
+                value={newWorkout.title}
+                onChange={handleChange}
+              />
+              <TextField.Root
+                name="description"
+                placeholder="Description"
+                value={newWorkout.description}
+                onChange={handleChange}
+              />
+              <TextField.Root
+                name="duration"
+                type="number"
+                placeholder="Duration (minutes)"
+                value={newWorkout.duration}
+                onChange={handleChange}
+              />
+              <TextField.Root
+                name="difficulty"
+                placeholder="Difficulty (beginner, intermediate, advanced)"
+                value={newWorkout.difficulty}
+                onChange={handleChange}
+              />
+              <TextField.Root
+                name="required_equipment"
+                placeholder="Required Equipment"
+                value={newWorkout.required_equipment}
+                onChange={handleChange}
+              />
+              <TextField.Root
+                name="intensity"
+                placeholder="Intensity"
+                value={newWorkout.intensity}
+                onChange={handleChange}
+              />
+
+              <Button type="submit">Create</Button>
+              <Button type="button" onClick={() => setIsCreating(false)}>
+                Cancel
+              </Button>
+            </form>
+          </Card>
+        )}
 
         {/* Trainees */}
         <Card>

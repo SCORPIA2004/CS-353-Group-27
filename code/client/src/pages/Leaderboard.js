@@ -60,7 +60,6 @@ const Leaderboard = () => {
               <Text>ID</Text>
               <Text>First Name</Text>
               <Text>Last Name</Text>
-              <Text>DOB</Text>
               <Text>Score</Text>
             </Flex>
           </Card>
@@ -74,7 +73,6 @@ const Leaderboard = () => {
                 <Text>{user.id}</Text>
                 <Text>{user.first_name}</Text>
                 <Text>{user.last_name}</Text>
-                <Text>{user.dob}</Text>
                 <Text>{user.score}</Text>
               </Flex>
             </Card>

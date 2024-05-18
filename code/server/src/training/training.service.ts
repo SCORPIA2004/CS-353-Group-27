@@ -8,6 +8,7 @@ import {
   deleteWorkoutQuery,
   deleteUserWorkoutQuery,
   updateWorkoutQuery,
+  createWorkoutQuery,
 } from '@/db/training.queries';
 import { ScheduleConsultationDto } from '@/src/training/dto/schedule.dto';
 import { JWTUser } from '@/src/users/users.guard';
@@ -17,7 +18,6 @@ import { ReviewProgressDto } from '@/src/training/dto/review.progress.dto';
 import { getUserGoals } from '@/db/goal.queries';
 import { getTraineesQuery } from '@/db/training.queries';
 import { getWorkoutsCreatedByMe } from '@/db/workout.queries';
-// import { QueryResult } as QueryResult2 from 'mysql2';
 import * as mysql from 'mysql2';
 
 
@@ -160,13 +160,6 @@ export class TrainingService {
     return traineeProgress;
   }
 
-
-
-
-
-
-
-
   async deleteWorkout(workoutId: number, user: JWTUser) {
     if (user.role !== Role.TRAINER) {
       throw new HttpException(
@@ -180,7 +173,7 @@ export class TrainingService {
       await connection.execute(deleteUserWorkoutQuery(workoutId));
 
       // Delete the workout
-    const [result] = await connection.execute(deleteWorkoutQuery(workoutId));
+      const [result] = await connection.execute(deleteWorkoutQuery(workoutId));
 
       if ((result as mysql.ResultSetHeader).affectedRows === 0) {
         throw new HttpException('Workout not found', HttpStatus.NOT_FOUND);
@@ -196,20 +189,27 @@ export class TrainingService {
     }
   }
 
-
-
-
-
-    async updateWorkout(workoutId: number, user: JWTUser, updateData: any) {
+  async updateWorkout(workoutId: number, user: JWTUser, updateData: any) {
     if (user.role !== Role.TRAINER) {
-      throw new HttpException('Unauthorized. Not a Trainer.', HttpStatus.UNAUTHORIZED);
+      throw new HttpException(
+        'Unauthorized. Not a Trainer.',
+        HttpStatus.UNAUTHORIZED,
+      );
     }
 
     const { title, description, duration, difficulty, intensity } = updateData;
 
     try {
-
-    const [result] = await connection.execute(updateWorkoutQuery(workoutId, title, description, duration, difficulty, intensity));
+      const [result] = await connection.execute(
+        updateWorkoutQuery(
+          workoutId,
+          title,
+          description,
+          duration,
+          difficulty,
+          intensity,
+        ),
+      );
 
       if ((result as mysql.ResultSetHeader).affectedRows === 0) {
         throw new HttpException('Workout not found', HttpStatus.NOT_FOUND);
@@ -217,14 +217,44 @@ export class TrainingService {
 
       return { message: 'Workout updated successfully' };
     } catch (error) {
-      console.error("Error updating workout:", error);
-      throw new HttpException('Internal Server Error', HttpStatus.INTERNAL_SERVER_ERROR);
+      console.error('Error updating workout:', error);
+      throw new HttpException(
+        'Internal Server Error',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 
+  async createWorkout(user: JWTUser, createData: any) {
+    if (user.role !== Role.TRAINER) {
+      throw new HttpException(
+        'Unauthorized. Not a Trainer.',
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
 
+    const { title, description, duration, difficulty, required_equipment,  intensity } = createData;
 
+    try {
+      await connection.execute(
+        createWorkoutQuery(
+          title,
+          description,
+          duration,
+          difficulty,
+          required_equipment,
+          intensity,
+          user.id,
+        ),
+      );
 
-  
-
+      return { message: 'Workout created successfully' };
+    } catch (error) {
+      console.error('Error creating workout:', error);
+      throw new HttpException(
+        'Internal Server Error',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
 }

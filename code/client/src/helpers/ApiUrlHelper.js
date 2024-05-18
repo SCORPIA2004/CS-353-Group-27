@@ -22,4 +22,6 @@ export const DELETE_WORKOUT_URL = `${SERVER_URL}/training/workout`;
 
 export const UPDATE_WORKOUT_URL = `${SERVER_URL}/training/workout`;
 
+export const CREATE_WORKOUT_URL = `${SERVER_URL}/training/workout`;
+
 

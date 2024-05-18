@@ -58,6 +58,22 @@ export const updateWorkoutQuery = (workoutId: number, title: string, description
 };
 
 
+export const createWorkoutQuery = (
+  title: string,
+  description: string,
+  duration: number,
+  difficulty: string,
+  required_equipment: string,
+  intensity: string,
+  trainerId: number,
+) => {
+  return `
+    INSERT INTO workouts (title, description, duration, difficulty, intensity, required_equipment, trainer_id)
+    VALUES ('${title}', '${description}', ${duration}, '${difficulty}', '${intensity}', '${required_equipment}', ${trainerId})
+  `;
+};
+
+
 
 
 export const getTraineesQuery = (trainerId?: number) => {
