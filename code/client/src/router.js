@@ -15,6 +15,7 @@ import ScheduleConsultationPage from "./pages/ScheduleConsultationPage";
 import ReviewProgressPage from "./pages/TraineeProgressPage";
 import TraineeHomePage from './pages/TraineeHomepage';
 import TraineeProgressPage from './pages/TraineeProgressPage';
+import Leaderboard from './pages/Leaderboard';
 
 const Router = () => {
     return (
@@ -29,6 +30,8 @@ const Router = () => {
                 <Route path="/workout/:id" element={<WorkoutPage />} />
                 <Route path="/schedule-consultation" element={<ScheduleConsultationPage />} />
                 <Route path="/trainee-progress/:traineeId" element={<TraineeProgressPage />} />
+                <Route path="/leaderboard" element={<Leaderboard />} />
+
 
             </Routes>
         </BrowserRouter>

@@ -15,5 +15,7 @@ export const GET_TRAINEES_URL = `${SERVER_URL}/training/trainees`;
 export const GET_MY_WORKOUTS_URL = `${SERVER_URL}/training/workouts-created-by-me`;
 export const GET_TRAINEE_PROGRESS_URL = `${SERVER_URL}/training/trainee-progress`;
 
+export const GET_LEADERBOARD_URL = `${SERVER_URL}/leaderboard`;
+
 
 

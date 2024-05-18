@@ -131,6 +131,15 @@ const TrainerHomePage = () => {
       <Flex justify="center" direction="column" py={"4"} gap={"4"}>
         <Heading css={{ textAlign: "center" }}>Trainer Homepage</Heading>
 
+        <Flex justify="between">
+          <Button
+            style={{ cursor: "pointer" }}
+            onClick={() => navigate("/leaderboard")}
+          >
+            Leaderboard
+          </Button>
+        </Flex>
+
         {/* Trainees */}
         <Card>
           <Heading>My Trainees 🙋‍♂️</Heading>
