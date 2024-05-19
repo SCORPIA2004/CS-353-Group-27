@@ -1,3 +1,210 @@
+import React, { useEffect, useState } from "react";
+import {
+  Box,
+  Button,
+  Card,
+  Container,
+  Flex,
+  Heading,
+  Text,
+  TextField,
+  Select,
+} from "@radix-ui/themes";
+
+
+import { useNavigate } from "react-router-dom";
+import useAuth from "../utils/useAuth";
+import {
+  GET_CONSULTATIONS_URL,
+  GET_TRAINEES_URL,
+  GET_MY_WORKOUTS_URL,
+  DELETE_WORKOUT_URL,
+  UPDATE_WORKOUT_URL,
+  CREATE_WORKOUT_URL,
+} from "../helpers/ApiUrlHelper";
+import Modal from "../components/Modal";
+
+
+// For trainer
+const TrainerHomePage = () => {
+  const navigate = useNavigate();
+  const { isAuthenticated, isLoading } = useAuth();
+  const [scheduledConsultations, setScheduledConsultations] = useState([]);
+  const [trainees, setTrainees] = useState([]);
+  const [myWorkouts, setMyWorkouts] = useState([]);
+  const [selectedWorkout, setSelectedWorkout] = useState(null);
+  const [newWorkout, setNewWorkout] = useState({
+    title: "",
+    description: "",
+    duration: "",
+    difficulty: "Set Difficulty",
+    required_equipment: "",
+    intensity: "Set Intensity",
+    
+  });
+  const [isCreating, setIsCreating] = useState(false);
+  const [hovered, setHovered] = useState(false);
+
+
+  const handleViewWorkout = (workout) => {
+    setSelectedWorkout(workout);
+  };
+
+  const handleOpenModal = (workout) => {
+    setSelectedWorkout(workout);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedWorkout(null);
+  };
+
+
+
+  
+  const fetchConsultations = async () => {
+  try {
+    const response = await fetch(GET_CONSULTATIONS_URL, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+    if (!response.ok) throw new Error("Failed to fetch consultations");
+    const data = await response.json();
+    setScheduledConsultations(data);
+  } catch (error) {
+    console.error("Error fetching consultations:", error);
+  }
+};
+
+  const fetchTrainees = async () => {
+    try {
+      const response = await fetch(GET_TRAINEES_URL, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      if (!response.ok) throw new Error("Failed to fetch trainees");
+      const data = await response.json();
+      setTrainees(data);
+    } catch (error) {
+      console.error("Failed to fetch trainees:", error);
+    }
+  };
+
+  const fetchMyWorkouts = async () => {
+    try {
+      const response = await fetch(GET_MY_WORKOUTS_URL, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      if (!response.ok) throw new Error("Failed to fetch workouts");
+      const data = await response.json();
+      setMyWorkouts(data);
+    } catch (error) {
+      console.error("Failed to fetch workouts:", error);
+    }
+  };
+
+
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      fetchConsultations();
+      fetchTrainees();
+      fetchMyWorkouts();
+    }
+  }, [navigate, isLoading, isAuthenticated]);
+
+  const style = {
+    width: "100%",
+  };
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const day = date.getDate();
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear();
+    return `${day}-${month}-${year}`;
+  };
+
+  function getColorForDifficulty(difficulty) {
+    switch (difficulty) {
+      case "beginner": 
+        return "green";
+      case "intermediate":
+        return "orange";
+      case "advanced":
+        return "red";
+      default:
+        return "grey";
+    }
+  }
+
+
+
+  const deleteWorkout = async (workoutId) => {
+    try {
+      const response = await fetch(`${DELETE_WORKOUT_URL}/${workoutId}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      if (!response.ok) throw new Error("Failed to delete workout");
+      const result = await response.json();
+      alert(result.message);
+      fetchMyWorkouts(); // Refresh the workouts list after deletion
+      handleCloseModal(); // Close the modal after deletion
+    } catch (error) {
+      console.error("Error deleting workout:", error);
+    }
+  };
+
+
+
+ const updateWorkout = async (workoutId, updateData) => {
+   try {
+     const response = await fetch(`${UPDATE_WORKOUT_URL}/${workoutId}`, {
+       method: "PUT",
+       headers: {
+         "Content-Type": "application/json",
+         Authorization: `Bearer ${localStorage.getItem("token")}`,
+       },
+       body: JSON.stringify(updateData),
+     });
+     if (!response.ok) throw new Error("Failed to update workout");
+     const result = await response.json();
+     alert(result.message);
+     fetchMyWorkouts(); // Refresh the workouts list after update
+     handleCloseModal(); // Close the modal after update
+   } catch (error) {
+     console.error("Error updating workout:", error);
+   }
+ };
+
+
+
+  const createWorkout = async () => {
+    try {
+      const response = await fetch(CREATE_WORKOUT_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify(newWorkout),
+      });
+      if (!response.ok) throw new Error("Failed to create workout");
+      const result = await response.json();
+      alert(result.message);
+      fetchMyWorkouts(); // Refresh the workouts list after creation
+      setIsCreating(false); // Close the creation form
+      setNewWorkout({
+        title: "",
+        description: "",
+        duration: "",
+        difficulty: "",
         required_equipment: "",
         intensity: "",
       });
@@ -21,7 +228,7 @@
     <Container style={style}>
       <Flex justify="center" direction="column" py={"4"} gap={"4"}>
         <Heading css={{ textAlign: "center" }}>Trainer Homepage</Heading>
- {isCreating && (
+{isCreating && (
           <Card>
             <Heading style={{ padding: "10px" }} align="center" mb="5">
               Create New Workout
@@ -180,7 +387,7 @@
 
           {/* My workouts */}
           <Card style={{ flex: 3 }}>
-<Flex justify="between">
+            <Flex justify="between">
               <Heading>My Workouts 💪</Heading>
               <Button
                 style={{ cursor: "pointer" }}
