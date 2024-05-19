@@ -229,106 +229,92 @@ const TrainerHomePage = () => {
       <Flex justify="center" direction="column" py={"4"} gap={"4"}>
         <Heading css={{ textAlign: "center" }}>Trainer Homepage</Heading>
 
-        <Flex justify="between">
-          <Button
-            style={{ cursor: "pointer" }}
-            onClick={() => navigate("/leaderboard")}
-          >
-            Leaderboard
-          </Button>
+        {isCreating && (
+          <Card>
+            <Heading style={{ padding: "10px" }} align="center" mb="5">
+              Create New Workout
+            </Heading>
+            <form onSubmit={handleSubmit}>
+              <Flex direction={"column"} gap={"2"}>
+                <Flex direction={"row"} justify={"center"} gap={"2"}>
+                  <TextField.Root
+                    name="title"
+                    placeholder="Title"
+                    value={newWorkout.title}
+                    onChange={handleChange}
+                  />
+                  <TextField.Root
+                    name="duration"
+                    type="number"
+                    placeholder="Duration (minutes)"
+                    value={newWorkout.duration}
+                    onChange={handleChange}
+                  />
+                </Flex>
 
-          <Button
-            style={{ cursor: "pointer" }}
-            onClick={() => setIsCreating(true)}
-          >
-            Create Workout
-          </Button>
-        </Flex>
+                <Flex direction={"row"} justify={"center"} gap={"2"}>
+                  <Select.Root
+                    value={newWorkout.difficulty}
+                    onValueChange={(value) =>
+                      setNewWorkout({ ...newWorkout, difficulty: value })
+                    }
+                  >
+                    <Select.Trigger>
+                      {newWorkout.difficulty || "Difficulty"}
+                    </Select.Trigger>
+                    <Select.Content>
+                      <Select.Group>
+                        <Select.Item value="beginner">Beginner</Select.Item>
+                        <Select.Item value="intermediate">
+                          Intermediate
+                        </Select.Item>
+                        <Select.Item value="advanced">Advanced</Select.Item>
+                      </Select.Group>
+                    </Select.Content>
+                  </Select.Root>
 
+                  <Select.Root
+                    value={newWorkout.intensity}
+                    onValueChange={(value) =>
+                      setNewWorkout({ ...newWorkout, intensity: value })
+                    }
+                  >
+                    <Select.Trigger>
+                      {newWorkout.intensity || "Intensity"}
+                    </Select.Trigger>
+                    <Select.Content>
+                      <Select.Group>
+                        <Select.Item value="low">Low</Select.Item>
+                        <Select.Item value="medium">Medium</Select.Item>
+                        <Select.Item value="high">High</Select.Item>
+                      </Select.Group>
+                    </Select.Content>
+                  </Select.Root>
+                </Flex>
 
+                <TextField.Root
+                  name="description"
+                  placeholder="Description"
+                  value={newWorkout.description}
+                  onChange={handleChange}
+                />
+                <TextField.Root
+                  name="required_equipment"
+                  placeholder="Required Equipment"
+                  value={newWorkout.required_equipment}
+                  onChange={handleChange}
+                />
 
-
-
-
-
-
-
-{isCreating && (
-  <Card>
-    <Heading style={{ padding: "10px" }} align="center" mb="5">
-      Create New Workout
-    </Heading>
-    <form onSubmit={handleSubmit}>
-      <Flex direction={"column"} gap={"2"}>
-        <Flex direction={"row"} justify={"center"} gap={"2"}>
-          <TextField.Root
-            name="title"
-            placeholder="Title"
-            value={newWorkout.title}
-            onChange={handleChange}
-          />
-          <TextField.Root
-            name="duration"
-            type="number"
-            placeholder="Duration (minutes)"
-            value={newWorkout.duration}
-            onChange={handleChange}
-          />
-        </Flex>
-
-        <Flex direction={"row"} justify={"center"} gap={"2"}>
-          <Select.Root value={newWorkout.difficulty} onValueChange={(value) => setNewWorkout({ ...newWorkout, difficulty: value })}>
-            <Select.Trigger>{newWorkout.difficulty || "Difficulty"}</Select.Trigger>
-            <Select.Content>
-              <Select.Group>
-                <Select.Item value="beginner">Beginner</Select.Item>
-                <Select.Item value="intermediate">Intermediate</Select.Item>
-                <Select.Item value="advanced">Advanced</Select.Item>
-              </Select.Group>
-            </Select.Content>
-          </Select.Root>
-
-          <Select.Root value={newWorkout.intensity} onValueChange={(value) => setNewWorkout({ ...newWorkout, intensity: value })}>
-            <Select.Trigger>{newWorkout.intensity || "Intensity"}</Select.Trigger>
-            <Select.Content>
-              <Select.Group>
-                <Select.Item value="low">Low</Select.Item>
-                <Select.Item value="medium">Medium</Select.Item>
-                <Select.Item value="high">High</Select.Item>
-              </Select.Group>
-            </Select.Content>
-          </Select.Root>
-        </Flex>
-
-        <TextField.Root
-          name="description"
-          placeholder="Description"
-          value={newWorkout.description}
-          onChange={handleChange}
-        />
-        <TextField.Root
-          name="required_equipment"
-          placeholder="Required Equipment"
-          value={newWorkout.required_equipment}
-          onChange={handleChange}
-        />
-        
-        <Flex justify={"center"} p="2" gap={"2"}>
-          <Button type="submit">Create</Button>
-          <Button type="button" onClick={() => setIsCreating(false)}>
-            Cancel
-          </Button>
-        </Flex>
-      </Flex>
-    </form>
-  </Card>
-)}
-
-
-
-
-
-
+                <Flex justify={"center"} p="2" gap={"2"}>
+                  <Button type="submit">Create</Button>
+                  <Button type="button" onClick={() => setIsCreating(false)}>
+                    Cancel
+                  </Button>
+                </Flex>
+              </Flex>
+            </form>
+          </Card>
+        )}
 
         {/* Trainees */}
         <Card>
@@ -402,7 +388,17 @@ const TrainerHomePage = () => {
 
           {/* My workouts */}
           <Card style={{ flex: 3 }}>
-            <Heading>My Workouts 💪</Heading>
+            <Flex justify="between">
+              <Heading>My Workouts 💪</Heading>
+              <Button
+                style={{ cursor: "pointer" }}
+                onClick={() => setIsCreating(true)}
+                
+              >
+                <Text style={{fontSize:"20px"}}>+</Text>
+              </Button>
+            </Flex>
+
             <Box css={{ overflowY: "auto", maxHeight: "200px" }}>
               <Card style={{ marginBlock: "15px", fontWeight: "bold" }}>
                 <Flex direction={"row"} justify={"between"}>
