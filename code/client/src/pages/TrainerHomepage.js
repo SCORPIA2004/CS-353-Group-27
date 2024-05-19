@@ -8,6 +8,7 @@ import {
   Heading,
   Text,
   TextField,
+  Select,
 } from "@radix-ui/themes";
 
 
@@ -36,9 +37,9 @@ const TrainerHomePage = () => {
     title: "",
     description: "",
     duration: "",
-    difficulty: "",
+    difficulty: "Set Difficulty",
     required_equipment: "",
-    intensity: "",
+    intensity: "Set Intensity",
     
   });
   const [isCreating, setIsCreating] = useState(false);
@@ -244,56 +245,90 @@ const TrainerHomePage = () => {
           </Button>
         </Flex>
 
-        {/* Form to create a new workout */}
-        {isCreating && (
-          <Card>
-            <Heading>Create New Workout</Heading>
-            <form onSubmit={handleSubmit}>
-              <TextField.Root
-                name="title"
-                placeholder="Title"
-                value={newWorkout.title}
-                onChange={handleChange}
-              />
-              <TextField.Root
-                name="description"
-                placeholder="Description"
-                value={newWorkout.description}
-                onChange={handleChange}
-              />
-              <TextField.Root
-                name="duration"
-                type="number"
-                placeholder="Duration (minutes)"
-                value={newWorkout.duration}
-                onChange={handleChange}
-              />
-              <TextField.Root
-                name="difficulty"
-                placeholder="Difficulty (beginner, intermediate, advanced)"
-                value={newWorkout.difficulty}
-                onChange={handleChange}
-              />
-              <TextField.Root
-                name="required_equipment"
-                placeholder="Required Equipment"
-                value={newWorkout.required_equipment}
-                onChange={handleChange}
-              />
-              <TextField.Root
-                name="intensity"
-                placeholder="Intensity"
-                value={newWorkout.intensity}
-                onChange={handleChange}
-              />
 
-              <Button type="submit">Create</Button>
-              <Button type="button" onClick={() => setIsCreating(false)}>
-                Cancel
-              </Button>
-            </form>
-          </Card>
-        )}
+
+
+
+
+
+
+
+{isCreating && (
+  <Card>
+    <Heading style={{ padding: "10px" }} align="center" mb="5">
+      Create New Workout
+    </Heading>
+    <form onSubmit={handleSubmit}>
+      <Flex direction={"column"} gap={"2"}>
+        <Flex direction={"row"} justify={"center"} gap={"2"}>
+          <TextField.Root
+            name="title"
+            placeholder="Title"
+            value={newWorkout.title}
+            onChange={handleChange}
+          />
+          <TextField.Root
+            name="duration"
+            type="number"
+            placeholder="Duration (minutes)"
+            value={newWorkout.duration}
+            onChange={handleChange}
+          />
+        </Flex>
+
+        <Flex direction={"row"} justify={"center"} gap={"2"}>
+          <Select.Root value={newWorkout.difficulty} onValueChange={(value) => setNewWorkout({ ...newWorkout, difficulty: value })}>
+            <Select.Trigger>{newWorkout.difficulty || "Difficulty"}</Select.Trigger>
+            <Select.Content>
+              <Select.Group>
+                <Select.Item value="beginner">Beginner</Select.Item>
+                <Select.Item value="intermediate">Intermediate</Select.Item>
+                <Select.Item value="advanced">Advanced</Select.Item>
+              </Select.Group>
+            </Select.Content>
+          </Select.Root>
+
+          <Select.Root value={newWorkout.intensity} onValueChange={(value) => setNewWorkout({ ...newWorkout, intensity: value })}>
+            <Select.Trigger>{newWorkout.intensity || "Intensity"}</Select.Trigger>
+            <Select.Content>
+              <Select.Group>
+                <Select.Item value="low">Low</Select.Item>
+                <Select.Item value="medium">Medium</Select.Item>
+                <Select.Item value="high">High</Select.Item>
+              </Select.Group>
+            </Select.Content>
+          </Select.Root>
+        </Flex>
+
+        <TextField.Root
+          name="description"
+          placeholder="Description"
+          value={newWorkout.description}
+          onChange={handleChange}
+        />
+        <TextField.Root
+          name="required_equipment"
+          placeholder="Required Equipment"
+          value={newWorkout.required_equipment}
+          onChange={handleChange}
+        />
+        
+        <Flex justify={"center"} p="2" gap={"2"}>
+          <Button type="submit">Create</Button>
+          <Button type="button" onClick={() => setIsCreating(false)}>
+            Cancel
+          </Button>
+        </Flex>
+      </Flex>
+    </form>
+  </Card>
+)}
+
+
+
+
+
+
 
         {/* Trainees */}
         <Card>
@@ -383,13 +418,10 @@ const TrainerHomePage = () => {
                   style={{
                     marginBlock: "10px",
                     cursor: "pointer",
-                    backgroundColor: hovered ? "#008B8B" : "initial", // Change color on hover
-                    color: hovered ? "black" : "initial", // Change text color on hover
                   }}
                   key={index}
                   onMouseEnter={() => setHovered(true)}
                   onMouseLeave={() => setHovered(false)}
-                  onClick={() => handleViewWorkout(myWorkouts)}
                 >
                   {" "}
                   <Flex direction={"row"} justify={"between"}>
@@ -397,6 +429,16 @@ const TrainerHomePage = () => {
                     <Text>{myWorkouts.title}</Text>
                     <Text>{myWorkouts.difficulty}</Text>
                     <Text>{myWorkouts.intensity}</Text>
+                    <Button
+                      style={{
+                        cursor: "pointer",
+                        height: "26px",
+                        fontSize: "13px",
+                      }}
+                      onClick={() => handleViewWorkout(myWorkouts)}
+                    >
+                      More
+                    </Button>
                   </Flex>
                 </Card>
               ))}
