@@ -1,6 +1,30 @@
 import { Flex } from "@radix-ui/themes";
 import React, { useState } from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
+
+// Define keyframes for the drop animation
+const dropIn = keyframes`
+  0% {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+`;
+
+// Define keyframes for the drop-out animation
+const dropOut = keyframes`
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+`;
 
 const Background = styled.div`
   position: fixed;
@@ -27,6 +51,7 @@ const ModalWrapper = styled.div`
   display: flex;
   flex-direction: column;
   position: relative;
+  animation: ${(props) => (props.isClosing ? dropOut : dropIn)} 0.3s ease-out;
 `;
 
 const CloseButton = styled.button`
@@ -63,25 +88,7 @@ const Details = styled.p`
   text-align: left;
 `;
 
-const Input = styled.input`
-  padding: 10px;
-  margin-bottom: 10px;
-  border: none;
-  border-radius: 5px;
-  font-size: 18px;
-  width: 100%;
-`;
-
-const TextArea = styled.textarea`
-  padding: 10px;
-  margin-bottom: 10px;
-  border: none;
-  border-radius: 5px;
-  font-size: 18px;
-  width: 100%;
-  resize: none;
-`;
-
+// button is blue
 const Button = styled.button`
   padding: 10px 20px;
   margin-top: 20px;
@@ -98,9 +105,17 @@ const Button = styled.button`
   }
 `;
 
+
 const Modal = ({ workoutDetails, onClose, updateWorkout, deleteWorkout }) => {
   const [editMode, setEditMode] = useState(false);
   const [formData, setFormData] = useState(workoutDetails);
+  const [isClosing, setIsClosing] = useState(false);
+
+  const handleClose = () => {
+    setIsClosing(true);
+    setTimeout(onClose, 300); // Delay unmounting by the duration of the animation
+  };
+
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -119,8 +134,8 @@ const Modal = ({ workoutDetails, onClose, updateWorkout, deleteWorkout }) => {
 
   return (
     <Background>
-      <ModalWrapper>
-        <CloseButton onClick={onClose}>&times;</CloseButton>
+      <ModalWrapper isClosing={isClosing}>
+        <CloseButton onClick={handleClose}>&times;</CloseButton>
         <ContentArea>
           {editMode ? (
             <form onSubmit={handleSubmit}>
