@@ -4,10 +4,7 @@ import { connection } from '@/db';
 import { registerDto } from '@/src/users/dto/register.dto';
 import { RowDataPacket } from 'mysql2';
 import { encode } from '@/encryption/encoding';
-import { createTraineeQuery, createTrainerQuery, getUserQuery, loginQuery, registerQuery } from '@/db/user.queries';
-import { Role } from '@/enum/role.enum';
-import { trainerRegisterDto } from '@/src/users/dto/trainer.register.dto';
-import { traineeRegisterDto } from '@/src/users/dto/trainee.register.dto';
+import { getUserQuery, loginQuery, registerQuery } from '@/db/user.queries';
 
 @Injectable()
 export class UsersService {
@@ -26,34 +23,19 @@ export class UsersService {
     });
   }
 
-  async register(data: trainerRegisterDto | traineeRegisterDto, role: Role) {
+  async register(data: registerDto) {
     const [QueryResult] = await connection.execute(getUserQuery(data.email));
 
     if ((QueryResult as RowDataPacket[]).length > 0) {
       throw new HttpException(`User with email ${data.email} already exists`, HttpStatus.BAD_REQUEST); // Return 400 for bad request
     }
 
-    const res = await connection.execute(registerQuery(data.email, data.password, data.firstname, data.lastname, data.dob, role));
-    const userId = (res as RowDataPacket[])[0].insertId;
-
-    if (role === Role.TRAINER && !(data instanceof traineeRegisterDto)) {
-      await connection.execute(createTrainerQuery(userId, data.experience, data.speciality));
-    } else if (role === Role.TRAINEE && !(data instanceof trainerRegisterDto)) {
-      await connection.execute(createTraineeQuery(userId, data.height, data.weight));
-    }
+    const res = await connection.execute(registerQuery(data.email, data.password, data.firstname, data.lastname, data.dob, data.role));
 
     return encode({
-      id: userId,
+      id: (res as RowDataPacket[])[0].insertId,
       email: data.email,
-      role: role,
+      role: data.role,
     });
-  }
-
-  async getUser(email: string) {
-    const [QueryResult] = await connection.execute(getUserQuery(email));
-
-    delete QueryResult[0].password;
-
-    return QueryResult[0]
   }
 }

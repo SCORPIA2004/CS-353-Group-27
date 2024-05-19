@@ -5,14 +5,13 @@ import { searchWorkoutDto } from '@/src/workouts/dto/search.dto';
 import { Role } from '@/enum/role.enum';
 import { connection } from '@/db';
 import { RowDataPacket } from 'mysql2';
-import {createWorkout, logWorkout, searchWorkout, searchWorkoutLogs} from '@/db/workout.queries';
+import { createWorkout, logWorkout, searchWorkout } from '@/db/workout.queries';
 import getSimpleDate from '@/utils/get.simple.date';
-import {JWTUser} from "@/src/users/users.guard";
 
 @Injectable()
 export class WorkoutsService {
 
-  async create(data: CreateWorkoutDto, user: JWTUser) {
+  async create(data: CreateWorkoutDto, user: { email: string, role: string, id: number }) {
     if (user.role !== Role.TRAINER) {
       throw new HttpException('Unauthorized. Not a trainer.', HttpStatus.UNAUTHORIZED);
     }
@@ -28,9 +27,9 @@ export class WorkoutsService {
     return QueryResult
   }
 
-  async logWorkout(data: logWorkoutDto, user: JWTUser) {
-    if (user.role !== Role.TRAINEE) {
-      throw new HttpException('Unauthorized. Not a Trainee.', HttpStatus.UNAUTHORIZED);
+  async logWorkout(data: logWorkoutDto, user: any) {
+    if (user.role !== Role.USER) {
+      throw new HttpException('Unauthorized. Not a User.', HttpStatus.UNAUTHORIZED);
     }
 
     const [QueryResult] = await connection.execute(searchWorkout(data.workoutId));
@@ -42,16 +41,5 @@ export class WorkoutsService {
     const [CreateResult] = await connection.execute(logWorkout(data.workoutId, user.id, data.duration, data.caloriesBurned, getSimpleDate()));
 
     return (CreateResult as RowDataPacket).insertId;
-  }
-
-
-  async getLogs(user: JWTUser) {
-    if (user.role !== Role.TRAINEE) {
-      throw new HttpException('Unauthorized. Not a Trainee.', HttpStatus.UNAUTHORIZED);
-    }
-
-    const [QueryResult] = await connection.execute(searchWorkoutLogs(user.id));
-
-    return QueryResult
   }
 }

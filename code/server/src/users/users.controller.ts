@@ -1,12 +1,10 @@
-import {Body, Controller, Get, Post, Req, UseGuards, UsePipes} from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards, UsePipes } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { loginDto } from './dto/login.dto';
+import { registerDto } from './dto/register.dto';
 import { ApiHeader, ApiResponse } from '@nestjs/swagger';
-import {JWTUser, UsersGuard} from '@/src/users/users.guard';
+import { UsersGuard } from '@/src/users/users.guard';
 import { SimplePipe } from '@/pipes';
-import { traineeRegisterDto } from '@/src/users/dto/trainee.register.dto';
-import { trainerRegisterDto } from '@/src/users/dto/trainer.register.dto';
-import { Role } from '@/enum/role.enum';
 
 @Controller('users')
 @UsePipes(SimplePipe)
@@ -25,18 +23,11 @@ export class UsersController {
     return await this.usersService.login(data);
   }
 
-  @Post('register/trainer')
+  @Post('register')
   @ApiResponse({ status: 200, description: 'Returns authorization token' })
   @ApiResponse({ status: 400, description: 'Validation failed: user already exists' })
-  async TrainerRegister(@Body() data: trainerRegisterDto) {
-    return await this.usersService.register(data, Role.TRAINER);
-  }
-
-  @Post('register/trainee')
-  @ApiResponse({ status: 200, description: 'Returns authorization token' })
-  @ApiResponse({ status: 400, description: 'Validation failed: user already exists' })
-  async TraineeRegister(@Body() data: traineeRegisterDto) {
-    return await this.usersService.register(data, Role.TRAINEE);
+  async register(@Body() data: registerDto) {
+    return await this.usersService.register(data);
   }
 
   @Get('check-token')
@@ -47,15 +38,13 @@ export class UsersController {
   })
   @ApiResponse({
     status: 200,
-    description: 'Token is valid and can be used to perform other operations. Returns user info.',
+    description: 'Token is valid and can be used to perform other operations.',
   })
   @ApiResponse({
     status: 401,
     description: 'Unauthorized. Token is either missing, invalid, or expired.',
   })
   @UseGuards(UsersGuard)
-  async checkToken(@Req() req: Request) {
-    const user: JWTUser = req['user'];
-    return await this.usersService.getUser(user.email);
+  async checkToken() {
   }
 }

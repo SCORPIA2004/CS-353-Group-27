@@ -1,8 +1,7 @@
-import { IsNotEmpty, IsString, MaxLength, MinLength, IsDateString, IsEnum, IsNumber } from 'class-validator';
+import { IsNotEmpty, IsString, MaxLength, MinLength, IsDateString, IsEnum } from 'class-validator';
 import { AuthDto } from './auth.dto';
 import {ApiProperty} from "@nestjs/swagger";
 import {Role} from "@/enum/role.enum";
-import { Speciality } from '@/enum/speciality.enum';
 
 
 export class registerDto extends AuthDto {
@@ -25,4 +24,8 @@ export class registerDto extends AuthDto {
     @IsDateString()
     dob: Date;
 
+    @ApiProperty({ enum: Role, description: 'The role of the user'})
+    @IsNotEmpty({ message: 'Role must not be empty' })
+    @IsEnum(Role, { message: 'Invalid role' })
+    role: Role;
 }
