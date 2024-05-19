@@ -1,82 +1,429 @@
-import React, { useEffect, useState } from 'react';
-import { Box, Button, Card, Container, Flex, Heading, Text, Select, Option } from "@radix-ui/react-components";
-import { useNavigate } from "react-router-dom";
-import useCheckAuthenticated from "../utils/useCheckAuthenticated"; 
+@@ -1,317 +1,429 @@
+import React, { useEffect, useState } from "react";
+import {
+  Box,
+  Button,
+  Card,
+  Container,
+  Flex,
+  Heading,
+  Text,
+  TextField,
+} from "@radix-ui/themes";
 
+
+import { useNavigate } from "react-router-dom";
+import useAuth from "../utils/useAuth";
+import {
+  GET_CONSULTATIONS_URL,
+  GET_TRAINEES_URL,
+  GET_MY_WORKOUTS_URL,
+  DELETE_WORKOUT_URL,
+  UPDATE_WORKOUT_URL,
+  CREATE_WORKOUT_URL,
+} from "../helpers/ApiUrlHelper";
+import Modal from "../components/Modal";
+
+
+// For trainer
 const TrainerHomePage = () => {
   const navigate = useNavigate();
-  const [isAuthenticated, isLoading] = useCheckAuthenticated();
-  const [workouts, setWorkouts] = useState([]);
-  const [filter, setFilter] = useState({ difficulty: '', duration: '', equipment: '' });
+  const { isAuthenticated, isLoading } = useAuth();
+  const [scheduledConsultations, setScheduledConsultations] = useState([]);
+  const [trainees, setTrainees] = useState([]);
+  const [myWorkouts, setMyWorkouts] = useState([]);
+  const [selectedWorkout, setSelectedWorkout] = useState(null);
+  const [newWorkout, setNewWorkout] = useState({
+    title: "",
+    description: "",
+    duration: "",
+    difficulty: "",
+    required_equipment: "",
+    intensity: "",
+    
+  });
+  const [isCreating, setIsCreating] = useState(false);
+  const [hovered, setHovered] = useState(false);
+
+
+  const handleViewWorkout = (workout) => {
+    setSelectedWorkout(workout);
+  };
+
+  const handleOpenModal = (workout) => {
+    setSelectedWorkout(workout);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedWorkout(null);
+  };
+
+
+
+  
+  const fetchConsultations = async () => {
+  try {
+    const response = await fetch(GET_CONSULTATIONS_URL, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+    if (!response.ok) throw new Error("Failed to fetch consultations");
+    const data = await response.json();
+    setScheduledConsultations(data);
+  } catch (error) {
+    console.error("Error fetching consultations:", error);
+  }
+};
+
+  const fetchTrainees = async () => {
+    try {
+      const response = await fetch(GET_TRAINEES_URL, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      if (!response.ok) throw new Error("Failed to fetch trainees");
+      const data = await response.json();
+      setTrainees(data);
+    } catch (error) {
+      console.error("Failed to fetch trainees:", error);
+    }
+  };
+
+  const fetchMyWorkouts = async () => {
+    try {
+      const response = await fetch(GET_MY_WORKOUTS_URL, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      if (!response.ok) throw new Error("Failed to fetch workouts");
+      const data = await response.json();
+      setMyWorkouts(data);
+    } catch (error) {
+      console.error("Failed to fetch workouts:", error);
+    }
+  };
+
+
 
   useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
-      navigate('/login');
-    }
     if (isAuthenticated) {
-      fetchWorkouts();
+      fetchConsultations();
+      fetchTrainees();
+      fetchMyWorkouts();
     }
   }, [navigate, isLoading, isAuthenticated]);
 
-  const fetchWorkouts = async () => {
-    const query = `difficulty=${filter.difficulty}&duration=${filter.duration}&equipment=${filter.equipment}`;
-    const response = await fetch(`/api/workouts?${query}`);
-    const data = await response.json();
-    setWorkouts(data);
-  };
-
-  const handleFilterChange = (field, value) => {
-    setFilter(prev => ({ ...prev, [field]: value }));
-    fetchWorkouts();
-  };
-
   const style = {
-    backgroundImage: `url('bg.jpg')`,
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
-    width: '100vw',
-    height: '100vh'
+    width: "100%",
   };
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const day = date.getDate();
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear();
+    return `${day}-${month}-${year}`;
+  };
+
+  function getColorForDifficulty(difficulty) {
+    switch (difficulty) {
+      case "beginner": 
+        return "green";
+      case "intermediate":
+        return "orange";
+      case "advanced":
+        return "red";
+      default:
+        return "grey";
+    }
+  }
+
+
+
+  const deleteWorkout = async (workoutId) => {
+    try {
+      const response = await fetch(`${DELETE_WORKOUT_URL}/${workoutId}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      if (!response.ok) throw new Error("Failed to delete workout");
+      const result = await response.json();
+      alert(result.message);
+      fetchMyWorkouts(); // Refresh the workouts list after deletion
+      handleCloseModal(); // Close the modal after deletion
+    } catch (error) {
+      console.error("Error deleting workout:", error);
+    }
+  };
+
+
+
+ const updateWorkout = async (workoutId, updateData) => {
+   try {
+     const response = await fetch(`${UPDATE_WORKOUT_URL}/${workoutId}`, {
+       method: "PUT",
+       headers: {
+         "Content-Type": "application/json",
+         Authorization: `Bearer ${localStorage.getItem("token")}`,
+       },
+       body: JSON.stringify(updateData),
+     });
+     if (!response.ok) throw new Error("Failed to update workout");
+     const result = await response.json();
+     alert(result.message);
+     fetchMyWorkouts(); // Refresh the workouts list after update
+     handleCloseModal(); // Close the modal after update
+   } catch (error) {
+     console.error("Error updating workout:", error);
+   }
+ };
+
+
+
+  const createWorkout = async () => {
+    try {
+      const response = await fetch(CREATE_WORKOUT_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify(newWorkout),
+      });
+      if (!response.ok) throw new Error("Failed to create workout");
+      const result = await response.json();
+      alert(result.message);
+      fetchMyWorkouts(); // Refresh the workouts list after creation
+      setIsCreating(false); // Close the creation form
+      setNewWorkout({
+        title: "",
+        description: "",
+        duration: "",
+        difficulty: "",
+        required_equipment: "",
+        intensity: "",
+      });
+    } catch (error) {
+      console.error("Error creating workout:", error);
+    }
+  };
+
+  const handleChange = (e) => {
+    setNewWorkout({ ...newWorkout, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    createWorkout();
+  };
+
+
 
   return (
     <Container style={style}>
-      <Flex justify="center" direction="column" css={{ gap: '$4', padding: '$6' }}>
-        <Heading css={{ textAlign: 'center' }}>Hello Trainer</Heading>
-        
+      <Flex justify="center" direction="column" py={"4"} gap={"4"}>
+        <Heading css={{ textAlign: "center" }}>Trainer Homepage</Heading>
+
+        <Flex justify="between">
+          <Button
+            style={{ cursor: "pointer" }}
+            onClick={() => navigate("/leaderboard")}
+          >
+            Leaderboard
+          </Button>
+
+          <Button
+            style={{ cursor: "pointer" }}
+            onClick={() => setIsCreating(true)}
+          >
+            Create Workout
+          </Button>
+        </Flex>
+
+        {/* Form to create a new workout */}
+        {isCreating && (
+          <Card>
+            <Heading>Create New Workout</Heading>
+            <form onSubmit={handleSubmit}>
+              <TextField.Root
+                name="title"
+                placeholder="Title"
+                value={newWorkout.title}
+                onChange={handleChange}
+              />
+              <TextField.Root
+                name="description"
+                placeholder="Description"
+                value={newWorkout.description}
+                onChange={handleChange}
+              />
+              <TextField.Root
+                name="duration"
+                type="number"
+                placeholder="Duration (minutes)"
+                value={newWorkout.duration}
+                onChange={handleChange}
+              />
+              <TextField.Root
+                name="difficulty"
+                placeholder="Difficulty (beginner, intermediate, advanced)"
+                value={newWorkout.difficulty}
+                onChange={handleChange}
+              />
+              <TextField.Root
+                name="required_equipment"
+                placeholder="Required Equipment"
+                value={newWorkout.required_equipment}
+                onChange={handleChange}
+              />
+              <TextField.Root
+                name="intensity"
+                placeholder="Intensity"
+                value={newWorkout.intensity}
+                onChange={handleChange}
+              />
+
+              <Button type="submit">Create</Button>
+              <Button type="button" onClick={() => setIsCreating(false)}>
+                Cancel
+              </Button>
+            </form>
+          </Card>
+        )}
+
+        {/* Trainees */}
         <Card>
-          <Box css={{ overflowY: 'auto', maxHeight: '200px' }}>
-            {workouts.map((workout, index) => (
-              <Flex key={index} css={{ justifyContent: 'space-between' }}>
-                <Text>{workout.name}</Text>
+          <Heading>My Trainees 🙋‍♂️</Heading>
+          <Box css={{ overflowY: "auto", maxHeight: "200px" }}>
+            <Card style={{ marginBlock: "15px", fontWeight: "bold" }}>
+              <Flex direction={"row"} justify={"between"}>
+                <Text>ID</Text>
+                <Text>First name</Text>
+                <Text>Last name</Text>
+                <Text>Height</Text>
+                <Text>Weight</Text>
+                <Text>Track Progress</Text>
               </Flex>
+            </Card>
+
+            {trainees.map((trainee, index) => (
+              <Card
+                style={{ marginBlock: "10px", cursor: "pointer" }}
+                key={index}
+              >
+                <Flex direction={"row"} justify={"between"}>
+                  <Text>{trainee.trainee_id}</Text>
+                  <Text>{trainee.first_name}</Text>
+                  <Text>{trainee.last_name}</Text>
+                  <Text>{trainee.height}</Text>
+                  <Text>{trainee.weight}</Text>
+                  <Button
+                    style={{
+                      cursor: "pointer",
+                      height: "26px",
+                      fontSize: "13px",
+                    }}
+                    onClick={() =>
+                      navigate(`/trainee-progress/${trainee.trainee_id}`)
+                    }
+                  >
+                    Progress
+                  </Button>
+                </Flex>
+              </Card>
             ))}
           </Box>
         </Card>
-        
-        <Select onValueChange={e => handleFilterChange('difficulty', e.target.value)}>
-          {workouts.map(workout => workout.difficulty).filter((v, i, a) => a.indexOf(v) === i).map(difficulty => (
-            <Option key={difficulty} value={difficulty}>{difficulty}</Option>
-          ))}
-        </Select>
-        <Select onValueChange={e => handleFilterChange('duration', e.target.value)}>
-          <Option value="15">Up to 15 Minutes</Option>
-          <Option value="30">Up to 30 Minutes</Option>
-          <Option value="45">Up to 45 Minutes</Option>
-          <Option value="60">Up to 60 Minutes</Option>
-          <Option value="75">Up to 75 Minutes</Option>
-          <Option value="90">Up to 90 Minutes</Option>
-          <Option value="90+">More than 90 Minutes</Option>
-        </Select>
-        <Select onValueChange={e => handleFilterChange('equipment', e.target.value)}>
-          {workouts.flatMap(workout => workout.equipment).filter((v, i, a) => a.indexOf(v) === i).map(equipment => (
-            <Option key={equipment} value={equipment}>{equipment}</Option>
-          ))}
-        </Select>
 
-        <Button onClick={() => navigate('/createWorkout')}>Create Workout</Button>
+        <Flex justify="center" direction="row" py={"4"} gap={"4"}>
+          {/* scheduled consultations */}
+          <Card style={{ flex: 2 }}>
+            <Heading>Scheduled Consultations ⏰</Heading>
+            <Box>
+              <Card style={{ marginBlock: "15px", fontWeight: "bold" }}>
+                <Flex direction={"row"} justify={"between"}>
+                  <Text>Date</Text>
+                  <Text>Trainee ID</Text>
+                </Flex>
+              </Card>
+
+              {scheduledConsultations.map((consultation, index) => (
+                <Card
+                  style={{ marginBlock: "10px", cursor: "pointer" }}
+                  key={index}
+                >
+                  <Flex direction={"row"} justify={"between"}>
+                    <Text>{formatDate(consultation.date)}</Text>
+                    <Text>{consultation.trainee_id}</Text>
+                  </Flex>
+                </Card>
+              ))}
+            </Box>
+          </Card>
+
+          {/* My workouts */}
+          <Card style={{ flex: 3 }}>
+            <Heading>My Workouts 💪</Heading>
+            <Box css={{ overflowY: "auto", maxHeight: "200px" }}>
+              <Card style={{ marginBlock: "15px", fontWeight: "bold" }}>
+                <Flex direction={"row"} justify={"between"}>
+                  <Text>ID</Text>
+                  <Text>Title</Text>
+                  <Text>Difficulty</Text>
+                  <Text>Intensity</Text>
+                </Flex>
+              </Card>
+
+              {myWorkouts.map((myWorkouts, index) => (
+                <Card
+                  style={{
+                    marginBlock: "10px",
+                    cursor: "pointer",
+                    backgroundColor: hovered ? "#008B8B" : "initial", // Change color on hover
+                    color: hovered ? "black" : "initial", // Change text color on hover
+                  }}
+                  key={index}
+                  onMouseEnter={() => setHovered(true)}
+                  onMouseLeave={() => setHovered(false)}
+                  onClick={() => handleViewWorkout(myWorkouts)}
+                >
+                  {" "}
+                  <Flex direction={"row"} justify={"between"}>
+                    <Text>{myWorkouts.id}</Text>
+                    <Text>{myWorkouts.title}</Text>
+                    <Text>{myWorkouts.difficulty}</Text>
+                    <Text>{myWorkouts.intensity}</Text>
+                  </Flex>
+                </Card>
+              ))}
+            </Box>
+          </Card>
+        </Flex>
       </Flex>
+
+      {selectedWorkout && (
+        <div>
+          <button onClick={() => handleOpenModal(workouts[0])}>
+            {/* View Workout Details */}
+          </button>
+          {selectedWorkout && (
+            <Modal
+              workoutDetails={selectedWorkout}
+              onClose={handleCloseModal}
+              deleteWorkout={deleteWorkout}
+              updateWorkout={updateWorkout}
+            />
+          )}
+        </div>
+      )}
     </Container>
   );
+
 };
 
 export default TrainerHomePage;
