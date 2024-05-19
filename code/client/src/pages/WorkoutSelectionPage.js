@@ -6,33 +6,39 @@ import {
   Container,
   Flex,
   Heading,
+  Select,
   Text,
   TextField,
-  Select,
-  Icon
 } from "@radix-ui/themes";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../utils/useAuth";
-import { WORKOUTS_URL } from "../helpers/ApiUrlHelper"; // assuming this hook provides the token
+import { WORKOUTS_URL } from "../helpers/ApiUrlHelper";
 import { MagnifyingGlassIcon, FilterIcon } from "@radix-ui/react-icons";
 
 const WorkoutSelectionPage = () => {
   const navigate = useNavigate();
-  const { isAuthenticated, isLoading, token } = useAuth(); // assuming token is provided by useAuth
+  const { isAuthenticated } = useAuth();
   const [workouts, setWorkouts] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [difficulty, setDifficulty] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null); // state for handling errors
-  const [searchTerm, setSearchTerm] = useState(""); // state for handling search input
-  const [difficulty, setDifficulty] = useState(""); // state for handling difficulty filter
 
   const fetchWorkouts = async () => {
     try {
-      const response = await fetch(WORKOUTS_URL, {
+      let url = `${WORKOUTS_URL}?`;
+      if (searchTerm) {
+        url += `title=${searchTerm}&`;
+      }
+      if (difficulty && difficulty !== "No Preference") {
+        url += `difficulty=${difficulty.toLowerCase()}&`;
+      }
+
+      const response = await fetch(url, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
-
       if (response.ok) {
         const data = await response.json();
         setWorkouts(data);
@@ -48,12 +54,21 @@ const WorkoutSelectionPage = () => {
   };
 
   useEffect(() => {
-    if (isAuthenticated && !isLoading) {
+    if (isAuthenticated) {
       fetchWorkouts();
-    } else if (!isAuthenticated && !isLoading) {
-      navigate("/login");
     }
-  }, [isAuthenticated, isLoading]);
+  }, [isAuthenticated]);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      fetchWorkouts();
+    }
+  }, [searchTerm, difficulty]);
+
+  const handleClearFilters = () => {
+    setSearchTerm("");
+    setDifficulty("");
+  };
 
   const style = {
     backgroundImage: `url('bg.jpg')`,
@@ -62,92 +77,115 @@ const WorkoutSelectionPage = () => {
     width: "100%",
   };
 
-  const filteredWorkouts = workouts.filter(
-    (workout) =>
-      workout.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
-      (difficulty ? workout.difficulty === difficulty : true)
-  );
-
   return (
     <div style={style}>
       <Container>
         <Flex justify="center" direction="column" gap="4" py={"4"}>
-          <Heading css={{ textAlign: "center" }}>Select a Workout</Heading>
-
-          <Flex direction="row" gap="2" justify="center" mb="4">
-            <Flex
-              align="center"
-              style={{ position: "relative", marginBottom: "20px" }}
-            >
-              <MagnifyingGlassIcon
-                style={{ position: "absolute", left: "10px", zIndex: 1 }}
-              />
-              <TextField.Root
-                  type="text"
-                  placeholder="Search workouts"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  style={{ paddingLeft: "30px" }} // Add padding to the left to make space for the icon
-                />
-            </Flex>
-
-            <Select.Root
-              value={difficulty}
-              onValueChange={(value) => setDifficulty(value)}
-            >
-              <Select.Trigger>{difficulty || "Difficulty"}</Select.Trigger>
-              <Select.Content>
-                <Select.Group>
-                  <Select.Label>Difficulty</Select.Label>
-                  <Select.Item value="beginner">Beginner</Select.Item>
-                  <Select.Item value="intermediate">Intermediate</Select.Item>
-                  <Select.Item value="advanced">Advanced</Select.Item>
-                </Select.Group>
-              </Select.Content>
-            </Select.Root>
-          </Flex>
-          {loading ? (
-            <Text>Loading workouts...</Text>
-          ) : error ? (
-            <Text>{error}</Text>
-          ) : (
-            <Flex direction="column" gap={"4"}>
-              {filteredWorkouts.map((workout, index) => (
-                <Card
-                  key={index}
-                  style={{ cursor: "pointer" }}
-                  onClick={() => navigate(`/workout/${workout.id}`)}
+          <Card
+            style={{
+              padding: "20px",
+              borderRadius: "10px",
+              boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
+            }}
+          >
+            <Heading style={{ color: "#f5f5f5" }}>Workouts 💪</Heading>
+            <Box>
+              <Flex gap={"3"} justify="center" align="center" mb="4">
+                <Flex
+                  style={{ display: "flex", alignItems: "center" }}
                 >
-                  <Flex
-                    justify="between"
-                    align="center"
-                    direction="row"
-                    gap="2"
-                  >
-                    <div>
-                      <Flex direction={"column"}>
-                        <div style={{ marginBottom: "20px" }}>
-                          <Heading style={{ marginBottom: "8px" }}>
-                            {workout.title}
-                          </Heading>
-                          <Text>{workout.description}</Text>
-                        </div>
-                        <Text>
-                          {workout.duration} mins, {workout.difficulty}.
-                        </Text>
-                      </Flex>
-                    </div>
-                    <Button
-                      style={{ marginRight: "13px", cursor: "pointer" }}
-                      onClick={() => navigate(`/active-workout/${workout.id}`)}
+                  <MagnifyingGlassIcon style={{ marginRight: "8px" }} />
+                  <TextField.Root
+                    type="text"
+                    placeholder="Search workouts"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                  />
+                </Flex>
+
+                <Select.Root value={difficulty} onValueChange={setDifficulty}>
+                  <Select.Trigger>
+                    <Flex align="center" gap="2">
+                      {difficulty || "Difficulty"}
+                    </Flex>
+                  </Select.Trigger>
+                  <Select.Content>
+                    <Select.Group>
+                      <Select.Item value="No Preference">
+                        No Preference
+                      </Select.Item>
+                      <Select.Item value="beginner">Beginner</Select.Item>
+                      <Select.Item value="intermediate">
+                        Intermediate
+                      </Select.Item>
+                      <Select.Item value="advanced">Advanced</Select.Item>
+                    </Select.Group>
+                  </Select.Content>
+                </Select.Root>
+
+                <Button style={{ cursor: "pointer" }} onClick={fetchWorkouts}>
+                  Search
+                </Button>
+                <Button
+                  style={{ cursor: "pointer" }}
+                  onClick={handleClearFilters}
+                >
+                  Clear Filters
+                </Button>
+              </Flex>
+
+              {loading ? (
+                <Text>Loading workouts...</Text>
+              ) : error ? (
+                <Text>{error}</Text>
+              ) : (
+                <Flex direction="column" gap={"4"}>
+                  {workouts.map((workout, index) => (
+                    <Card
+                      style={{
+                        marginBlock: "10px",
+                        padding: "15px",
+                        borderRadius: "10px",
+                        boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+                        cursor: "pointer",
+                      }}
+                      key={index}
+                      onClick={() => navigate(`/workout/${workout.id}`)}
                     >
-                      Start Workout
-                    </Button>
-                  </Flex>
-                </Card>
-              ))}
-            </Flex>
-          )}
+                      <Flex
+                        justify="between"
+                        align="center"
+                        direction="row"
+                        gap="2"
+                      >
+                        <div>
+                          <Flex direction={"column"}>
+                            <div style={{ marginBottom: "20px" }}>
+                              <Heading style={{ marginBottom: "8px" }}>
+                                {workout.title}
+                              </Heading>
+                              <Text>{workout.description}</Text>
+                            </div>
+                            <Text>
+                              {workout.duration} mins, {workout.difficulty}.
+                            </Text>
+                          </Flex>
+                        </div>
+                        <Button
+                          style={{ marginRight: "13px", cursor: "pointer" }}
+                          onClick={() =>
+                            navigate(`/active-workout/${workout.id}`)
+                          }
+                        >
+                          Start Workout
+                        </Button>
+                      </Flex>
+                    </Card>
+                  ))}
+                </Flex>
+              )}
+            </Box>
+          </Card>
         </Flex>
       </Container>
     </div>
