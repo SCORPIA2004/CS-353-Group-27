@@ -28,3 +28,5 @@ export const GOALS_URL = `${SERVER_URL}/goals`;
 export const UPDATE_GOALS_URL = `${GOALS_URL}/update`;
 export const GOAL_SUGGESTION_URL = `${GOALS_URL}/suggestion`;
 
+export const  TRAINERS_URL = `${SERVER_URL}/training`;
+export const CONSULTATION_URL = `${TRAINERS_URL}/consultation`;

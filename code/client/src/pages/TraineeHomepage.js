@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {Box, Button, Card, Container, Flex, Heading, Text} from "@radix-ui/themes";
 import {useNavigate} from "react-router-dom";
 import useAuth from "../utils/useAuth";
-import {WORKOUT_LOG_URL, WORKOUTS_URL} from "../helpers/ApiUrlHelper";
+import {CONSULTATION_URL, WORKOUT_LOG_URL, WORKOUTS_URL} from "../helpers/ApiUrlHelper";
 
 //For trainee
 const TraineeHomePage = () => {
@@ -31,11 +31,21 @@ const TraineeHomePage = () => {
 
     const fetchConsultations = async () => {
         try {
-            const response = await fetch('your_api/nutrition-plans');
-            const data = await response.json();
-            setConsultations(data);
+            const response = await fetch(`${CONSULTATION_URL}`, {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            if (response.ok) {
+                let data = await response.json();
+                // Sort consultations by date in descending order
+                data = data.sort((b, a) => new Date(b.date) - new Date(a.date));
+                setConsultations(data);
+            } else {
+                console.error('Error fetching workouts:');
+            }
         } catch (error) {
-            console.error('Failed to fetch nutrition plans:', error);
+            console.error('Error fetching workouts:', error);
         }
     };
 
@@ -59,74 +69,93 @@ const TraineeHomePage = () => {
     }
 
     return (
-      <Container style={style}>
-        <Flex justify="center" direction="column" py={"4"} gap={"4"}>
-          <Heading css={{ textAlign: "center" }}>Homepage</Heading>
+        <Container style={style}>
+            <Flex justify="center" direction="column" py={"4"} gap={"4"}>
+                <Heading css={{textAlign: "center"}}>Homepage</Heading>
 
-          <Flex justify="between">
-            <Button
-              style={{ cursor: "pointer" }}
-              onClick={() => navigate("/workout-selection")}
-            >
-              Start Workout
-            </Button>
-            <Button
-              style={{ cursor: "pointer" }}
-              onClick={() => navigate("/consultations")}
-            >
-              Consultations
-            </Button>
-            <Button
-              style={{ cursor: "pointer" }}
-              onClick={() => navigate("/leaderboard")}
-            >
-              Leaderboard
-            </Button>
-          </Flex>
-
-          <Card>
-            <Heading>Last Workouts</Heading>
-            <Box>
-              <Card>
-                <Flex
-                  direction={"row"}
-                  justify={"between"}
-                  style={{ fontWeight: "bold" }}
-                >
-                  <Text>Name</Text>
-                  <Text>Date</Text>
-                  <Text>Duration</Text>
-                  <Text>Calories Burned</Text>
-                </Flex>
-              </Card>
-
-                {lastWorkouts.slice(-5).reverse().map((workout, index) => (
-                    <Card
-                        style={{ marginBlock: "10px", cursor: "pointer" }}
-                        onClick={() => navigate(`/workout/${workout.workout_id}`)} // Fixed the navigate function
-                        key={index}
+                <Flex justify="between">
+                    <Button
+                        style={{cursor: "pointer"}}
+                        onClick={() => navigate("/workout-selection")}
                     >
-                        <Flex direction={"row"} justify={"between"}>
-                            <Text>{workout.workout_title}</Text>
-                            <Text>{formatDate(workout.date)}</Text>
-                            <Text>{workout.duration} minutes</Text>
-                            <Text>{workout.calories_burned} calories burned</Text>
-                        </Flex>
-                    </Card>
-                ))}
-            </Box>
-          </Card>
+                        Start Workout
+                    </Button>
+                    <Button
+                        style={{cursor: "pointer"}}
+                        onClick={() => navigate("/consultations")}
+                    >
+                        Consultations
+                    </Button>
+                    <Button
+                        style={{cursor: "pointer"}}
+                        onClick={() => navigate("/leaderboard")}
+                    >
+                        Leaderboard
+                    </Button>
+                </Flex>
 
-          <Card>
-            <Heading>Upcoming Consultations</Heading>
-            <Box css={{ overflowY: "auto", maxHeight: "200px" }}>
-              {consultations.map((plan, index) => (
-                <Text key={index}>{plan.title}</Text>
-              ))}
-            </Box>
-          </Card>
-        </Flex>
-      </Container>
+                <Card>
+                    <Heading>Last Workouts</Heading>
+                    <Box>
+                        <Card>
+                            <Flex
+                                direction={"row"}
+                                justify={"between"}
+                                style={{fontWeight: "bold"}}
+                            >
+                                <Text>Name</Text>
+                                <Text>Date</Text>
+                                <Text>Duration</Text>
+                                <Text>Calories Burned</Text>
+                            </Flex>
+                        </Card>
+
+                        {lastWorkouts.slice(-5).reverse().map((workout, index) => (
+                            <Card
+                                style={{marginBlock: "10px", cursor: "pointer"}}
+                                onClick={() => navigate(`/workout/${workout.workout_id}`)} // Fixed the navigate function
+                                key={index}
+                            >
+                                <Flex direction={"row"} justify={"between"}>
+                                    <Text>{workout.workout_title}</Text>
+                                    <Text>{formatDate(workout.date)}</Text>
+                                    <Text>{workout.duration} minutes</Text>
+                                    <Text>{workout.calories_burned} calories burned</Text>
+                                </Flex>
+                            </Card>
+                        ))}
+                    </Box>
+                </Card>
+
+                <Card>
+                    <Heading>Upcoming Consultations</Heading>
+                    <Box>
+                        <Card>
+                            <Flex
+                                direction={"row"}
+                                justify={"between"}
+                                style={{fontWeight: "bold"}}
+                            >
+                                <Text>Name</Text>
+                                <Text>Consultation Date</Text>
+                            </Flex>
+                        </Card>
+
+                        {consultations.filter(consultation => new Date(consultation.date) >= new Date()).slice(0, 5).map((consultation, index) => (
+                            <Card
+                                style={{marginBlock: "10px"}}
+                                key={index}
+                            >
+                                <Flex direction={"row"} justify={"between"}>
+                                    <Text>{consultation.trainer_first_name} {consultation.trainer_last_name}</Text>
+                                    <Text>{formatDate(consultation.date)}</Text>
+                                </Flex>
+                            </Card>
+                        ))}
+                    </Box>
+                </Card>
+            </Flex>
+        </Container>
     );
 };
 

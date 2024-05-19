@@ -20,6 +20,8 @@ import GoalsPage from "./pages/GoalsPage";
 import GoalSuggestionPage from "./pages/GoalSuggestionPage";
 import NewGoalPage from "./pages/NewGoalPage";
 import PastWorkoutsPage from "./pages/PastWorkoutsPage";
+import FindTrainerPage from "./pages/FindTrainerPage";
+import ConsultationsPage from "./pages/ConsultationsPage";
 
 const Router = () => {
     return (
@@ -39,6 +41,8 @@ const Router = () => {
                 <Route path={"/goals/suggestion/:id"} element={<GoalSuggestionPage />} />
                 <Route path={"/goals/create-goal"} element={<NewGoalPage />} />
                 <Route path={"/past-workouts"} element={<PastWorkoutsPage />} />
+                <Route path={"/trainers"} element={<FindTrainerPage />} />
+                <Route path={"/consultations"} element={<ConsultationsPage />} />
             </Routes>
         </BrowserRouter>
     )

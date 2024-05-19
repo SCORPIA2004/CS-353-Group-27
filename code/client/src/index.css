@@ -1,3 +1,8 @@
+:root {
+  --date-picker-left: 12%;
+  --date-picker-picker-left: 7%;
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -29,13 +34,23 @@ code {
 
 input[type="date"]::-webkit-calendar-picker-indicator {
   position: absolute;
-  left: 7%;
+  left: var(--date-picker-picker-left);
 }
+input[type="time"]::-webkit-calendar-picker-indicator {
+  position: absolute;
+  left: -3%;
+}
+
+input[type="time"] {
+    position: relative;
+    left: 7%;
+}
+
 input::-webkit-datetime-edit-fields-wrapper {
   position: relative;
-  left: 12%;
+  left: var(--date-picker-left);
 }
 input::-webkit-datetime-edit {
   position: relative;
-  left: 12%;
+  left: var(--date-picker-left);
 }
