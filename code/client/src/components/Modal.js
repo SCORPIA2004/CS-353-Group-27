@@ -1,4 +1,4 @@
-import { Flex } from "@radix-ui/themes";
+import { Flex, TextField, Select } from "@radix-ui/themes";
 import React, { useState } from "react";
 import styled, { keyframes } from "styled-components";
 
@@ -105,7 +105,6 @@ const Button = styled.button`
   }
 `;
 
-
 const Modal = ({ workoutDetails, onClose, updateWorkout, deleteWorkout }) => {
   const [editMode, setEditMode] = useState(false);
   const [formData, setFormData] = useState(workoutDetails);
@@ -116,9 +115,12 @@ const Modal = ({ workoutDetails, onClose, updateWorkout, deleteWorkout }) => {
     setTimeout(onClose, 300); // Delay unmounting by the duration of the animation
   };
 
-
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSelectChange = (name, value) => {
+    setFormData({ ...formData, [name]: value });
   };
 
   const handleSubmit = (e) => {
@@ -139,37 +141,68 @@ const Modal = ({ workoutDetails, onClose, updateWorkout, deleteWorkout }) => {
         <ContentArea>
           {editMode ? (
             <form onSubmit={handleSubmit}>
-              <Input
-                name="title"
-                value={formData.title}
-                onChange={handleChange}
-              />
-              <TextArea
-                name="description"
-                value={formData.description}
-                onChange={handleChange}
-              />
-              <Input
-                name="duration"
-                type="number"
-                value={formData.duration}
-                onChange={handleChange}
-              />
-              <Input
-                name="difficulty"
-                value={formData.difficulty}
-                onChange={handleChange}
-              />
-              <Input
-                name="intensity"
-                value={formData.intensity}
-                onChange={handleChange}
-              />
-              <Flex gap="10px" justify="center">
-                <Button type="submit">Save</Button>
-                <Button type="button" onClick={() => setEditMode(false)}>
-                  Cancel
-                </Button>
+              <Flex direction={"column"} gap={"3"}>
+                <TextField.Root
+                    name="title"
+                    value={formData.title}
+                    onChange={handleChange}
+                    placeholder="Title"
+                  />
+                <TextField.Root
+                    name="description"
+                    value={formData.description}
+                    onChange={handleChange}
+                    placeholder="Description"
+                  />
+                <TextField.Root
+                    name="duration"
+                    type="number"
+                    value={formData.duration}
+                    onChange={handleChange}
+                    placeholder="Duration (minutes)"
+                  />
+                <Select.Root
+                  value={formData.difficulty}
+                  onValueChange={(value) =>
+                    handleSelectChange("difficulty", value)
+                  }
+                >
+                  <Select.Trigger>
+                    {formData.difficulty || "Difficulty"}
+                  </Select.Trigger>
+                  <Select.Content>
+                    <Select.Group>
+                      <Select.Item value="beginner">Beginner</Select.Item>
+                      <Select.Item value="intermediate">
+                        Intermediate
+                      </Select.Item>
+                      <Select.Item value="advanced">Advanced</Select.Item>
+                    </Select.Group>
+                  </Select.Content>
+                </Select.Root>
+                <Select.Root
+                  value={formData.intensity}
+                  onValueChange={(value) =>
+                    handleSelectChange("intensity", value)
+                  }
+                >
+                  <Select.Trigger>
+                    {formData.intensity || "Intensity"}
+                  </Select.Trigger>
+                  <Select.Content>
+                    <Select.Group>
+                      <Select.Item value="low">Low</Select.Item>
+                      <Select.Item value="medium">Medium</Select.Item>
+                      <Select.Item value="high">High</Select.Item>
+                    </Select.Group>
+                  </Select.Content>
+                </Select.Root>
+                <Flex gap="10px" justify="center">
+                  <Button type="submit">Save</Button>
+                  <Button type="button" onClick={() => setEditMode(false)}>
+                    Cancel
+                  </Button>
+                </Flex>
               </Flex>
             </form>
           ) : (

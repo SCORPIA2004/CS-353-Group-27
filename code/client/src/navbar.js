@@ -35,66 +35,63 @@ const Navbar = () => {
             Fitness Tracker
           </Heading>
           <Flex gap="5" align={"center"}>
+            {user.role === 'trainee' && (
+              <>
+                <DropdownMenu.Root>
+                  <DropdownMenu.Trigger>
+                    <Button style={{ cursor: "pointer" }} variant="ghost">
+                      Workout & Training
+                    </Button>
+                  </DropdownMenu.Trigger>
+                  <DropdownMenu.Content>
+                    <DropdownMenu.Item style={{ cursor: "pointer" }}>
+                      My Workouts
+                    </DropdownMenu.Item>
+                  </DropdownMenu.Content>
+                </DropdownMenu.Root>
+                <DropdownMenu.Root>
+                  <DropdownMenu.Trigger>
+                    <Button variant="ghost" style={{ cursor: "pointer" }}>
+                      Progress
+                    </Button>
+                  </DropdownMenu.Trigger>
+                  <DropdownMenu.Content>
+                    <DropdownMenu.Item style={{ cursor: "pointer" }}>
+                      Goals
+                    </DropdownMenu.Item>
+                    <DropdownMenu.Separator />
+                    <DropdownMenu.Item style={{ cursor: "pointer" }}>
+                      Progress Reports
+                    </DropdownMenu.Item>
+                  </DropdownMenu.Content>
+                </DropdownMenu.Root>
+                <DropdownMenu.Root>
+                  <DropdownMenu.Trigger>
+                    <Button variant="ghost" style={{ cursor: "pointer" }}>
+                      Trainers
+                    </Button>
+                  </DropdownMenu.Trigger>
+                  <DropdownMenu.Content>
+                    <DropdownMenu.Item style={{ cursor: "pointer" }}>
+                      Find Trainer{" "}
+                    </DropdownMenu.Item>
+                  </DropdownMenu.Content>
+                </DropdownMenu.Root>
+              </>
+            )}
+
             <DropdownMenu.Root>
               <DropdownMenu.Trigger>
-                <Button style={{ cursor: "pointer" }} variant="ghost">
-                  Workout & Training
+                <Button
+                  style={{ cursor: "pointer" }}
+                  variant="ghost"
+                  onClick={() => navigate("/leaderboard")}
+                >
+                  Leaderboard
                 </Button>
               </DropdownMenu.Trigger>
-              <DropdownMenu.Content>
-                <DropdownMenu.Item style={{ cursor: "pointer" }}>
-                  My Workouts
-                </DropdownMenu.Item>
-              </DropdownMenu.Content>
             </DropdownMenu.Root>
-            <DropdownMenu.Root>
-              <DropdownMenu.Trigger>
-                <Button variant="ghost" style={{ cursor: "pointer" }}>
-                  Progress
-                </Button>
-              </DropdownMenu.Trigger>
-              <DropdownMenu.Content>
-                <DropdownMenu.Item style={{ cursor: "pointer" }}>
-                  Goals
-                </DropdownMenu.Item>
-                <DropdownMenu.Separator />
-                <DropdownMenu.Item style={{ cursor: "pointer" }}>
-                  Progress Reports
-                </DropdownMenu.Item>
-              </DropdownMenu.Content>
-            </DropdownMenu.Root>
-            <DropdownMenu.Root>
-              <DropdownMenu.Trigger>
-                <Button variant="ghost" style={{ cursor: "pointer" }}>
-                  Trainers
-                </Button>
-              </DropdownMenu.Trigger>
-              <DropdownMenu.Content>
-                <DropdownMenu.Item style={{ cursor: "pointer" }}>
-                  Find Trainer{" "}
-                </DropdownMenu.Item>
-              </DropdownMenu.Content>
-            </DropdownMenu.Root>
-
-
-          <DropdownMenu.Root>
-            <DropdownMenu.Trigger>
-              <Button
-                style={{ cursor: "pointer" }}
-                variant="ghost"
-                onClick={() => navigate("/leaderboard")}
-              >
-                Leaderboard
-              </Button>
-            </DropdownMenu.Trigger>
-          </DropdownMenu.Root>
-
-
-
-
-
           </Flex>
-
 
           <DropdownMenu.Root>
             <DropdownMenu.Trigger>

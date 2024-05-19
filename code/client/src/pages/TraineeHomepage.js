@@ -59,44 +59,73 @@ const TraineeHomePage = () => {
     }
 
     return (
-        <Container style={style}>
-            <Flex justify="center" direction="column" py={"4"} gap={"4"}>
-                <Heading css={{textAlign: 'center'}}>Homepage</Heading>
+      <Container style={style}>
+        <Flex justify="center" direction="column" py={"4"} gap={"4"}>
+          <Heading css={{ textAlign: "center" }}>Homepage</Heading>
 
-                <Flex justify="between">
-                    <Button style={{cursor: "pointer"}} onClick={() => navigate('/workout-selection')}>Start
-                        Workout</Button>
-                    <Button style={{cursor: "pointer"}} onClick={() => navigate('/nutrition-plan')}>Nutrition
-                        Plans</Button>
-                    <Button style={{cursor: "pointer"}} onClick={() => navigate('/leaderboard')}>Leaderboard</Button>
+          <Flex justify="between">
+            <Button
+              style={{ cursor: "pointer" }}
+              onClick={() => navigate("/workout-selection")}
+            >
+              Start Workout
+            </Button>
+            <Button
+              style={{ cursor: "pointer" }}
+              onClick={() => navigate("/nutrition-plan")}
+            >
+              Nutrition Plans
+            </Button>
+            <Button
+              style={{ cursor: "pointer" }}
+              onClick={() => navigate("/leaderboard")}
+            >
+              Leaderboard
+            </Button>
+          </Flex>
+
+          <Card>
+            <Heading>Last Workouts</Heading>
+            <Box>
+              <Card>
+                <Flex
+                  direction={"row"}
+                  justify={"between"}
+                  style={{ fontWeight: "bold" }}
+                >
+                  <Text>WID</Text>
+                  <Text>Date</Text>
+                  <Text>Duration</Text>
+                  <Text>Calories Burned</Text>
                 </Flex>
+              </Card>
 
-                <Card>
-                    <Heading>Last Workouts</Heading>
-                    <Box>
-                        {lastWorkouts.map((workout, index) => (
-                            <Card style={{marginBlock: "10px", cursor: "pointer"}} onClick={() => navigate('/workout/id')}>
-                                <Flex direction={"row"} justify={"between"} key={index}>
-                                    <Text>{formatDate(workout.date)}</Text>
-                                    <Text>{workout.duration} minutes</Text>
-                                    <Text>{workout.calories_burned} calories burned</Text>
-                                </Flex>
-                            </Card>
-                        ))}
-                    </Box>
-
+              {lastWorkouts.map((workout, index) => (
+                <Card
+                  style={{ marginBlock: "10px", cursor: "pointer" }}
+                  onClick={() => navigate("/workout/id")}
+                >
+                  <Flex direction={"row"} justify={"between"} key={index}>
+                    <Text>{workout.workout_id}</Text>
+                    <Text>{formatDate(workout.date)}</Text>
+                    <Text>{workout.duration} minutes</Text>
+                    <Text>{workout.calories_burned} calories burned</Text>
+                  </Flex>
                 </Card>
+              ))}
+            </Box>
+          </Card>
 
-                <Card>
-                    <Heading>Nutrition Plans</Heading>
-                    <Box css={{overflowY: 'auto', maxHeight: '200px'}}>
-                        {nutritionPlans.map((plan, index) => (
-                            <Text key={index}>{plan.title}</Text>
-                        ))}
-                    </Box>
-                </Card>
-            </Flex>
-        </Container>
+          <Card>
+            <Heading>Nutrition Plans</Heading>
+            <Box css={{ overflowY: "auto", maxHeight: "200px" }}>
+              {nutritionPlans.map((plan, index) => (
+                <Text key={index}>{plan.title}</Text>
+              ))}
+            </Box>
+          </Card>
+        </Flex>
+      </Container>
     );
 };
 
