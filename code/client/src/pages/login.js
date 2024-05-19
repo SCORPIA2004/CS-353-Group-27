@@ -27,9 +27,9 @@ const LoginPage = () => {
         const role = data.role;
         
         if (role === 'trainee') {
-          navigate('/homepage');
+          navigate('/');
         } else if (role === 'trainer') {
-          navigate('/TrainerHomepage');
+          navigate('/trainerHome');
         }
       } else {
         setError('Invalid credentials. Please try again.'); 
