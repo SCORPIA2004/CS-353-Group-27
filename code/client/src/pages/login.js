@@ -21,9 +21,7 @@ const LoginPage = () => {
             });
       if (response.ok) {
                 const data = await response.text();
-                login(data)
-
-                navigate('/')
+                login(data, () => navigate('/'))
             } else if (response.status === 400) {
                 setError('Invalid credentials. Please try again.');
             } else {
