@@ -95,7 +95,7 @@ const TraineeHomePage = () => {
                 </Flex>
 
                 <Card>
-                    <Heading>Last Workouts</Heading>
+                    <Heading mb="3">Last Workouts</Heading>
                     <Box>
                         <Card>
                             <Flex
@@ -128,7 +128,7 @@ const TraineeHomePage = () => {
                 </Card>
 
                 <Card>
-                    <Heading>Upcoming Consultations</Heading>
+                    <Heading mb="3">Upcoming Consultations</Heading>
                     <Box>
                         <Card>
                             <Flex

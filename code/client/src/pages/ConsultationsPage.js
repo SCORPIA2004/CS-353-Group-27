@@ -84,7 +84,7 @@ const ConsultationsPage = () => {
     <Container style={style}>
       <Flex justify="center" direction="column" py={"4"} gap={"4"}>
         <Card>
-          <Heading>Consultations</Heading>
+          <Heading mb="3">Consultations ⏰</Heading>
           <Box>
             <Flex gap="3" justify="end" align="center" mb="4">
               <Text style={{ fontWeight: "bold" }}>Start Date:</Text>

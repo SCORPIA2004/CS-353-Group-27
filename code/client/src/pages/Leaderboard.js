@@ -53,7 +53,7 @@ const Leaderboard = () => {
   return (
     <Container>
       <Flex justify="center" direction="column" py={"4"} gap={"4"}>
-        <Heading css={{ textAlign: "center" }}>Leaderboard</Heading>
+        <Heading css={{ textAlign: "center" }}>Leaderboard 🏆</Heading>
         <Box css={{ overflowY: "auto", maxHeight: "400px" }}>
           <Card style={{ marginBlock: "15px", fontWeight: "bold" }}>
             <Flex direction={"row"} justify={"between"}>

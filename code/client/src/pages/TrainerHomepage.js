@@ -228,7 +228,7 @@ const TrainerHomePage = () => {
     <Container style={style}>
       <Flex justify="center" direction="column" py={"4"} gap={"4"}>
         <Heading css={{ textAlign: "center" }}>Trainer Homepage</Heading>
-{isCreating && (
+        {isCreating && (
           <Card>
             <Heading style={{ padding: "10px" }} align="center" mb="5">
               Create New Workout
@@ -317,7 +317,7 @@ const TrainerHomePage = () => {
 
         {/* Trainees */}
         <Card>
-          <Heading>My Trainees 🙋‍♂️</Heading>
+          <Heading mb="3">My Trainees 🙋‍♂️</Heading>
           <Box css={{ overflowY: "auto", maxHeight: "200px" }}>
             <Card style={{ marginBlock: "15px", fontWeight: "bold" }}>
               <Flex direction={"row"} justify={"between"}>
@@ -362,7 +362,7 @@ const TrainerHomePage = () => {
         <Flex justify="center" direction="row" py={"4"} gap={"4"}>
           {/* scheduled consultations */}
           <Card style={{ flex: 2 }}>
-            <Heading>Scheduled Consultations ⏰</Heading>
+            <Heading mb="3">Scheduled Consultations ⏰</Heading>
             <Box>
               <Card style={{ marginBlock: "15px", fontWeight: "bold" }}>
                 <Flex direction={"row"} justify={"between"}>
@@ -388,13 +388,12 @@ const TrainerHomePage = () => {
           {/* My workouts */}
           <Card style={{ flex: 3 }}>
             <Flex justify="between">
-              <Heading>My Workouts 💪</Heading>
+              <Heading mb="3">My Workouts 💪</Heading>
               <Button
                 style={{ cursor: "pointer" }}
                 onClick={() => setIsCreating(true)}
-                
               >
-                <Text style={{fontSize:"20px"}}>+</Text>
+                <Text style={{ fontSize: "20px" }}>+</Text>
               </Button>
             </Flex>
 

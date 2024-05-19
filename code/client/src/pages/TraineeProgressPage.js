@@ -66,7 +66,7 @@ const TraineeProgressPage = () => {
 
         {/* Trainee Info */}
         <Card>
-          <Heading>Trainee Info 🔍</Heading>
+          <Heading mb="3">Trainee Info 🔍</Heading>
           <Box>
             <Card style={{ marginBlock: "15px", fontWeight: "bold" }}>
               <Flex direction={"row"} justify={"between"}>
@@ -92,7 +92,7 @@ const TraineeProgressPage = () => {
 
         {/* Goals */}
         <Card>
-          <Heading>Goals 🎯</Heading>
+          <Heading mb="3">Goals 🎯</Heading>
           <Box css={{ overflowY: "auto", maxHeight: "200px" }}>
             <Card style={{ marginBlock: "15px", fontWeight: "bold" }}>
               <Flex direction={"row"} justify={"between"}>
@@ -133,7 +133,7 @@ const TraineeProgressPage = () => {
 
         {/* Workout History */}
         <Card>
-          <Heading>Workout History 💪</Heading>
+          <Heading mb="3">Workout History 💪</Heading>
           <Box css={{ overflowY: "auto", maxHeight: "200px" }}>
             <Card style={{ marginBlock: "15px", fontWeight: "bold" }}>
               <Flex direction={"row"} justify={"between"}>

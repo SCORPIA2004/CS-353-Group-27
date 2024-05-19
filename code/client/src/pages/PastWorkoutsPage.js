@@ -50,7 +50,7 @@ const PastWorkoutsPage = () => {
         <Container style={style}>
             <Flex justify="center" direction="column" py={"4"} gap={"4"}>
                 <Card>
-                    <Heading>Last Workouts</Heading>
+                    <Heading mb="3">Last Workouts</Heading>
                     <Box>
                         <Card>
                             <Flex
