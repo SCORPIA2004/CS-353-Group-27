@@ -1,45 +1,50 @@
 import { Speciality } from '@/enum/speciality.enum';
 
 export const searchTrainer = (speciality?: Speciality, experience?: number, id?: number) => {
-  let query = `SELECT * FROM trainers WHERE 1`;
+  let query = `
+    SELECT trainers.*, users.first_name, users.last_name
+    FROM trainers
+    JOIN users ON trainers.id = users.id
+    WHERE 1=1
+  `;
 
   if (speciality !== undefined) {
-    query += ` AND speciality = '${speciality}'`;
+    query += ` AND trainers.speciality = '${speciality}'`;
   }
 
   if (experience !== undefined) {
-    query += ` AND experience = ${experience}`;
+    query += ` AND trainers.experience = ${experience}`;
   }
 
   if (id !== undefined) {
-    query += ` AND id = ${id}`;
+    query += ` AND trainers.id = ${id}`;
   }
 
   return query;
 };
 
 export const createConsultation = (trainerId: number, traineeId: number, date: Date) => {
-  return `INSERT INTO consultations (trainerId, traineeId, date) VALUES (${trainerId}, ${traineeId}, '${date}')`;
-
+  return `INSERT INTO consultations (trainer_id, trainee_id, date) VALUES (${trainerId}, ${traineeId}, '${date}')`;
 }
 
 export const searchConsultation = (trainerId?: number, traineeId?: number, date?: Date) => {
-  let query = `SELECT * FROM consultations WHERE 1`;
+  let query = `SELECT consultations.*, users.first_name AS trainer_first_name, users.last_name AS trainer_last_name FROM consultations LEFT JOIN users ON consultations.trainer_id = users.id WHERE 1`;
 
   if (trainerId !== undefined) {
-    query += ` AND trainer_id = ${trainerId}`;
+    query += ` AND consultations.trainer_id = ${trainerId}`;
   }
 
   if (traineeId !== undefined) {
-    query += ` AND trainee_id = ${traineeId}`;
+    query += ` AND consultations.trainee_id = ${traineeId}`;
   }
 
   if (date !== undefined) {
-    query += ` AND date = '${date}'`;
+    query += ` AND consultations.date = '${date}'`;
   }
 
   return query;
 }
+
 export const deleteUserWorkoutQuery = (workoutId: number) => {
   return `DELETE FROM user_workout WHERE workout_id = ${workoutId}`;
 };
