@@ -16,6 +16,10 @@ import ReviewProgressPage from "./pages/TraineeProgressPage";
 import TraineeHomePage from './pages/TraineeHomepage';
 import TraineeProgressPage from './pages/TraineeProgressPage';
 import Leaderboard from './pages/Leaderboard';
+import GoalsPage from "./pages/GoalsPage";
+import GoalSuggestionPage from "./pages/GoalSuggestionPage";
+import NewGoalPage from "./pages/NewGoalPage";
+import PastWorkoutsPage from "./pages/PastWorkoutsPage";
 
 const Router = () => {
     return (
@@ -31,8 +35,10 @@ const Router = () => {
                 <Route path="/schedule-consultation" element={<ScheduleConsultationPage />} />
                 <Route path="/trainee-progress/:traineeId" element={<TraineeProgressPage />} />
                 <Route path="/leaderboard" element={<Leaderboard />} />
-
-
+                <Route path={"/goals"} element={<GoalsPage />} />
+                <Route path={"/goals/suggestion/:id"} element={<GoalSuggestionPage />} />
+                <Route path={"/goals/create-goal"} element={<NewGoalPage />} />
+                <Route path={"/past-workouts"} element={<PastWorkoutsPage />} />
             </Routes>
         </BrowserRouter>
     )

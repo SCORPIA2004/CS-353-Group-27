@@ -44,7 +44,7 @@ const Navbar = () => {
                     </Button>
                   </DropdownMenu.Trigger>
                   <DropdownMenu.Content>
-                    <DropdownMenu.Item style={{ cursor: "pointer" }}>
+                    <DropdownMenu.Item style={{ cursor: "pointer" }} onClick={() => {navigate('/past-workouts')}}>
                       My Workouts
                     </DropdownMenu.Item>
                   </DropdownMenu.Content>

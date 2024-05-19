@@ -9,7 +9,7 @@ const TraineeHomePage = () => {
     const navigate = useNavigate();
     const {isAuthenticated, isLoading} = useAuth();
     const [lastWorkouts, setLastWorkouts] = useState([]);
-    const [nutritionPlans, setNutritionPlans] = useState([]);
+    const [consultations, setConsultations] = useState([]);
 
     const fetchLastWorkouts = async () => {
         try {
@@ -29,11 +29,11 @@ const TraineeHomePage = () => {
         }
     };
 
-    const fetchNutritionPlans = async () => {
+    const fetchConsultations = async () => {
         try {
             const response = await fetch('your_api/nutrition-plans');
             const data = await response.json();
-            setNutritionPlans(data);
+            setConsultations(data);
         } catch (error) {
             console.error('Failed to fetch nutrition plans:', error);
         }
@@ -42,7 +42,7 @@ const TraineeHomePage = () => {
     useEffect(() => {
         if (isAuthenticated) {
             fetchLastWorkouts();
-            fetchNutritionPlans();
+            fetchConsultations();
         }
     }, [navigate, isLoading, isAuthenticated]);
 
@@ -72,9 +72,9 @@ const TraineeHomePage = () => {
             </Button>
             <Button
               style={{ cursor: "pointer" }}
-              onClick={() => navigate("/nutrition-plan")}
+              onClick={() => navigate("/consultations")}
             >
-              Nutrition Plans
+              Consultations
             </Button>
             <Button
               style={{ cursor: "pointer" }}
@@ -100,26 +100,27 @@ const TraineeHomePage = () => {
                 </Flex>
               </Card>
 
-              {lastWorkouts.map((workout, index) => (
-                <Card
-                  style={{ marginBlock: "10px", cursor: "pointer" }}
-                  onClick={() => navigate("/workout/id")}
-                >
-                  <Flex direction={"row"} justify={"between"} key={index}>
-                    <Text>{workout.workout_id}</Text>
-                    <Text>{formatDate(workout.date)}</Text>
-                    <Text>{workout.duration} minutes</Text>
-                    <Text>{workout.calories_burned} calories burned</Text>
-                  </Flex>
-                </Card>
-              ))}
+                {lastWorkouts.slice(-5).reverse().map((workout, index) => (
+                    <Card
+                        style={{ marginBlock: "10px", cursor: "pointer" }}
+                        onClick={() => navigate(`/workout/${workout.workout_id}`)} // Fixed the navigate function
+                        key={index}
+                    >
+                        <Flex direction={"row"} justify={"between"}>
+                            <Text>{workout.workout_id}</Text>
+                            <Text>{formatDate(workout.date)}</Text>
+                            <Text>{workout.duration} minutes</Text>
+                            <Text>{workout.calories_burned} calories burned</Text>
+                        </Flex>
+                    </Card>
+                ))}
             </Box>
           </Card>
 
           <Card>
-            <Heading>Nutrition Plans</Heading>
+            <Heading>Upcoming Consultations</Heading>
             <Box css={{ overflowY: "auto", maxHeight: "200px" }}>
-              {nutritionPlans.map((plan, index) => (
+              {consultations.map((plan, index) => (
                 <Text key={index}>{plan.title}</Text>
               ))}
             </Box>

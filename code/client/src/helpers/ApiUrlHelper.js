@@ -24,4 +24,7 @@ export const UPDATE_WORKOUT_URL = `${SERVER_URL}/training/workout`;
 
 export const CREATE_WORKOUT_URL = `${SERVER_URL}/training/workout`;
 
+export const GOALS_URL = `${SERVER_URL}/goals`;
+export const UPDATE_GOALS_URL = `${GOALS_URL}/update`;
+export const GOAL_SUGGESTION_URL = `${GOALS_URL}/suggestion`;
 
