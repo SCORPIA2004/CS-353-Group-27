@@ -58,7 +58,7 @@ const PastWorkoutsPage = () => {
                                 justify={"between"}
                                 style={{ fontWeight: "bold" }}
                             >
-                                <Text>WID</Text>
+                                <Text>Name</Text>
                                 <Text>Date</Text>
                                 <Text>Duration</Text>
                                 <Text>Calories Burned</Text>
@@ -72,7 +72,7 @@ const PastWorkoutsPage = () => {
                                 key={index}
                             >
                                 <Flex direction={"row"} justify={"between"}>
-                                    <Text>{workout.workout_id}</Text>
+                                    <Text>{workout.workout_title}</Text>
                                     <Text>{formatDate(workout.date)}</Text>
                                     <Text>{workout.duration} minutes</Text>
                                     <Text>{workout.calories_burned} calories burned</Text>

@@ -7,8 +7,6 @@ import styled from "styled-components";
 
 const WorkoutPage = () => {
     const [workout, setWorkout] = useState(null);
-    const [timeElapsed, setTimeElapsed] = useState(0);
-    const [timerRunning, setTimerRunning] = useState(false);
     const {id} = useParams();
     const {isAuthenticated, isLoading} = useAuth();
     const navigate = useNavigate();
