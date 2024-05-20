@@ -94,7 +94,6 @@ const WorkoutSelectionPage = () => {
                 <Flex
                   style={{ display: "flex", alignItems: "center" }}
                 >
-                  <MagnifyingGlassIcon style={{ marginRight: "8px" }} />
                   <TextField.Root
                     type="text"
                     placeholder="Search workouts"
