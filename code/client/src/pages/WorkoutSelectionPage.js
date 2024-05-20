@@ -17,7 +17,7 @@ import { MagnifyingGlassIcon, FilterIcon } from "@radix-ui/react-icons";
 
 const WorkoutSelectionPage = () => {
   const navigate = useNavigate();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, isLoading } = useAuth();
   const [workouts, setWorkouts] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [difficulty, setDifficulty] = useState("");
@@ -54,10 +54,14 @@ const WorkoutSelectionPage = () => {
   };
 
   useEffect(() => {
+    if (!isAuthenticated && !isLoading) {
+      navigate('/login');
+    }
+
     if (isAuthenticated) {
       fetchWorkouts();
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, isLoading, navigate]);
 
   useEffect(() => {
     if (isAuthenticated) {
