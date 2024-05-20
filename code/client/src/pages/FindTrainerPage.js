@@ -55,10 +55,14 @@ const FindTrainerPage = () => {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
                 },
-                body: JSON.stringify({date, trainerId}),
+                body: JSON.stringify({ date, trainerId }),
             });
+
             if (response.ok) {
                 navigate('/consultations');
+            } else if (response.status === 400) {
+                const jsonData = await response.json();
+                alert(jsonData.message);
             } else {
                 console.error('Failed to schedule consultation. Please try again later.');
             }
@@ -66,6 +70,7 @@ const FindTrainerPage = () => {
             console.error('Failed to schedule consultation. Please try again later.', err);
         }
     };
+
 
     const handleClearFilters = () => {
         setMinExperience('');

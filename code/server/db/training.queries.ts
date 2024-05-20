@@ -13,7 +13,7 @@ export const searchTrainer = (speciality?: Speciality, experience?: number, id?:
   }
 
   if (experience !== undefined) {
-    query += ` AND trainers.experience = ${experience}`;
+    query += ` AND trainers.experience >= ${experience}`;
   }
 
   if (id !== undefined) {

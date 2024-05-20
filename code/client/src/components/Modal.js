@@ -27,6 +27,7 @@ const dropOut = keyframes`
 `;
 
 const Background = styled.div`
+  overflow: auto;
   position: fixed;
   top: 0;
   left: 0;

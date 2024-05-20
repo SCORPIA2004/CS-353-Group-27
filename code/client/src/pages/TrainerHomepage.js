@@ -118,6 +118,7 @@ const TrainerHomePage = () => {
 
   const style = {
     width: "100%",
+    overflow: 'auto'
   };
 
   const formatDate = (dateString) => {
@@ -443,8 +444,8 @@ const TrainerHomePage = () => {
       </Flex>
 
       {selectedWorkout && (
-        <div>
-          <button onClick={() => handleOpenModal(workouts[0])}>
+        <div style={{border: '1px solid red', height: '100%', width: '100%'}}>
+          <button onClick={() => handleOpenModal(selectedWorkout)}>
             {/* View Workout Details */}
           </button>
           {selectedWorkout && (

@@ -31,6 +31,10 @@ const ConsultationsPage = () => {
     };
 
     useEffect(() => {
+        if (!isAuthenticated && !isLoading) {
+            navigate('/login');
+        }
+
         if (isAuthenticated) {
             fetchConsultations();
         }
