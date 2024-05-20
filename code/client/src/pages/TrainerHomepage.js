@@ -23,6 +23,7 @@ import {
   CREATE_WORKOUT_URL,
 } from "../helpers/ApiUrlHelper";
 import Modal from "../components/Modal";
+import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 
 
 // For trainer
@@ -33,6 +34,7 @@ const TrainerHomePage = () => {
   const [trainees, setTrainees] = useState([]);
   const [myWorkouts, setMyWorkouts] = useState([]);
   const [selectedWorkout, setSelectedWorkout] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
   const [newWorkout, setNewWorkout] = useState({
     title: "",
     description: "",
@@ -44,6 +46,10 @@ const TrainerHomePage = () => {
   });
   const [isCreating, setIsCreating] = useState(false);
   const [hovered, setHovered] = useState(false);
+
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
 
 
   const handleViewWorkout = (workout) => {
@@ -229,7 +235,7 @@ const TrainerHomePage = () => {
     <Container style={style}>
       <Flex justify="center" direction="column" py={"4"} gap={"4"}>
         <Heading css={{ textAlign: "center" }}>Trainer Homepage</Heading>
-{isCreating && (
+        {isCreating && (
           <Card>
             <Heading style={{ padding: "10px" }} align="center" mb="5">
               Create New Workout
@@ -318,7 +324,17 @@ const TrainerHomePage = () => {
 
         {/* Trainees */}
         <Card>
-          <Heading>My Trainees 🙋‍♂️</Heading>
+          <Heading mb="3">My Trainees 🙋‍♂️</Heading>
+
+          <Flex justify={"center"} p="2" gap={"2"}>
+            <TextField.Root
+                type="text"
+                placeholder="Search by first name"
+                value={searchTerm}
+                onChange={handleSearchChange}
+              />
+          </Flex>
+
           <Box css={{ overflowY: "auto", maxHeight: "200px" }}>
             <Card style={{ marginBlock: "15px", fontWeight: "bold" }}>
               <Flex direction={"row"} justify={"between"}>
@@ -331,39 +347,45 @@ const TrainerHomePage = () => {
               </Flex>
             </Card>
 
-            {trainees.map((trainee, index) => (
-              <Card
-                style={{ marginBlock: "10px", cursor: "pointer" }}
-                key={index}
-              >
-                <Flex direction={"row"} justify={"between"}>
-                  <Text>{trainee.trainee_id}</Text>
-                  <Text>{trainee.first_name}</Text>
-                  <Text>{trainee.last_name}</Text>
-                  <Text>{trainee.height}</Text>
-                  <Text>{trainee.weight}</Text>
-                  <Button
-                    style={{
-                      cursor: "pointer",
-                      height: "26px",
-                      fontSize: "13px",
-                    }}
-                    onClick={() =>
-                      navigate(`/trainee-progress/${trainee.trainee_id}`)
-                    }
-                  >
-                    Progress
-                  </Button>
-                </Flex>
-              </Card>
-            ))}
+            {trainees
+              .filter((trainee) =>
+                trainee.first_name
+                  .toLowerCase()
+                  .includes(searchTerm.toLowerCase())
+              )
+              .map((trainee, index) => (
+                <Card
+                  style={{ marginBlock: "10px", cursor: "pointer" }}
+                  key={index}
+                >
+                  <Flex direction={"row"} justify={"between"}>
+                    <Text>{trainee.trainee_id}</Text>
+                    <Text>{trainee.first_name}</Text>
+                    <Text>{trainee.last_name}</Text>
+                    <Text>{trainee.height}</Text>
+                    <Text>{trainee.weight}</Text>
+                    <Button
+                      style={{
+                        cursor: "pointer",
+                        height: "26px",
+                        fontSize: "13px",
+                      }}
+                      onClick={() =>
+                        navigate(`/trainee-progress/${trainee.trainee_id}`)
+                      }
+                    >
+                      Progress
+                    </Button>
+                  </Flex>
+                </Card>
+              ))}
           </Box>
         </Card>
 
         <Flex justify="center" direction="row" py={"4"} gap={"4"}>
           {/* scheduled consultations */}
           <Card style={{ flex: 2 }}>
-            <Heading>Scheduled Consultations ⏰</Heading>
+            <Heading mb="3">Scheduled Consultations ⏰</Heading>
             <Box>
               <Card style={{ marginBlock: "15px", fontWeight: "bold" }}>
                 <Flex direction={"row"} justify={"between"}>
@@ -389,13 +411,12 @@ const TrainerHomePage = () => {
           {/* My workouts */}
           <Card style={{ flex: 3 }}>
             <Flex justify="between">
-              <Heading>My Workouts 💪</Heading>
+              <Heading mb="3">My Workouts 💪</Heading>
               <Button
                 style={{ cursor: "pointer" }}
                 onClick={() => setIsCreating(true)}
-                
               >
-                <Text style={{fontSize:"20px"}}>+</Text>
+                <Text style={{ fontSize: "20px" }}>+</Text>
               </Button>
             </Flex>
 

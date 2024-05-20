@@ -41,18 +41,32 @@ const WorkoutSummaryPage = () => {
 
   return (
     <Container>
-      <Flex direction="column" css={{ gap: '20px', padding: '20px', width: '100%', background: '#000', color: '#fff', fontFamily: 'Arial, sans-serif', height: '100vh' }}>
-        <Heading css={{ textAlign: 'center' }}>Workout Summary</Heading>
-        
-        <Card css={{ padding: '20px' }}>
-          <Heading>{workoutName}</Heading>
+      <Flex
+        direction="column"
+        css={{
+          gap: "20px",
+          padding: "20px",
+          width: "100%",
+          background: "#000",
+          color: "#fff",
+          fontFamily: "Arial, sans-serif",
+          height: "100vh",
+        }}
+      >
+        <Heading css={{ textAlign: "center" }}>Workout Summary</Heading>
+
+        <Card css={{ padding: "20px" }}>
+          <Heading mb="3">{workoutName}</Heading>
           <Text>{new Date().toLocaleDateString()}</Text>
-          <Text>{Math.floor(duration / 60)}:{(duration % 60).toFixed(0).padStart(2, '0')}</Text>
+          <Text>
+            {Math.floor(duration / 60)}:
+            {(duration % 60).toFixed(0).padStart(2, "0")}
+          </Text>
           <Text>{calories} kcals</Text>
         </Card>
 
-        <Flex css={{ justifyContent: 'center' }}>
-          <Button onClick={() => navigate('/')}>Go Home</Button>
+        <Flex css={{ justifyContent: "center" }}>
+          <Button onClick={() => navigate("/")}>Go Home</Button>
         </Flex>
       </Flex>
     </Container>
