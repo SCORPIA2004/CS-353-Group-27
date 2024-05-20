@@ -29,6 +29,10 @@ const PastWorkoutsPage = () => {
     };
 
     useEffect(() => {
+        if (!isAuthenticated && !isLoading) {
+            navigate('/login');
+        }
+
         if (isAuthenticated) {
             fetchLastWorkouts();
         }

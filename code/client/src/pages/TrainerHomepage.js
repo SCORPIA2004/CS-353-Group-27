@@ -427,6 +427,7 @@ const TrainerHomePage = () => {
                   <Text>Title</Text>
                   <Text>Difficulty</Text>
                   <Text>Intensity</Text>
+                  <Text>Details</Text>
                 </Flex>
               </Card>
 
